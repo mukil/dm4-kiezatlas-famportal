@@ -90,43 +90,24 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             if (categorySets.isEmpty()) {
                 throw new RuntimeException("Missing the \"category\" parameter in request");
             }
-            List<List> topicLists = new ArrayList<List>();
-            List<RelatedTopic> relatedTopics = new ArrayList<RelatedTopic>();
-            // one or multi-categories OR
+            List<RelatedTopic> resultList = null;
             Iterator<CategorySet> iteratorSets = categorySets.iterator();
             while (iteratorSets.hasNext()) {
                 CategorySet categorySet = iteratorSets.next();
-                // add up all geo objects related to all categories involved in this categoryset (OR)
-                if (categorySets.size() == 1) {
-                    logger.info("> Fetching the sum of all topics for this category-set "
-                            + "(OR, categorySetSize: "+categorySets.size()+").");
-                    relatedTopics = fetchAllGeoObjects(categorySet);
+                // simply adding up all elements related to all categories (contains duplicates)
+                List<RelatedTopic> categoryList = uniteAllGeoObjects(categorySet);
+                // if there is something to intersect, do so
+                if (resultList != null) {
+                    logger.info(">> Intersecting " +resultList.size()+ " AND " +categoryList.size() +" geo objects");
+                    resultList = getIntersection(resultList, categoryList);
                 } else {
-                    logger.info("> Adding up the sum of topics in one category-set for "
-                            + "(AND, categorieSetSize: "+categorySets.size()+").");
-                    topicLists.add(fetchAllGeoObjects(categorySet));
-                }
-            }
-            // multi-category-sets AND
-            if (categorySets.size() > 1) {
-                logger.info("> Building the list of topics which are in all " + topicLists.size() + " collections.");
-                Iterator<List> topicCollections = topicLists.iterator();
-                while (topicCollections.hasNext()) {
-                    List<RelatedTopic> listA = topicCollections.next();
-                    if (topicCollections.hasNext()) { // even number of categorysets
-                        List<RelatedTopic> listB = topicCollections.next();
-                        relatedTopics.addAll(ListUtils.intersection(listA, listB));
-                        logger.info("> Building intersection of all elements in two category-sets (with +1).");
-                    } else { // odd number of categorysets
-                        relatedTopics.addAll(ListUtils.intersection(listA, relatedTopics));
-                        logger.info("> Building intersection of all elements in two category-sets (with the last).");
-                    }
+                    resultList = categoryList;
                 }
             }
             // make resultlist only contain unique topics
-            List<RelatedTopic> uniqueTopics = new ArrayList(new HashSet(relatedTopics));
+            List<RelatedTopic> uniqueList = new ArrayList(new HashSet(resultList));
             // apply proximity filter to our resultset and turn them into geo-objects
-            return applyProximityFilter(uniqueTopics, proximityFilter);
+            return applyProximityFilter(uniqueList, proximityFilter);
         } catch (Exception e) {
             throw new RuntimeException("Fetching geo objects failed (categorySets=" + categorySets + ")", e);
         }
@@ -191,16 +172,31 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     // ------------------------------------------------------------------------------------------------- Private Methods
 
     /**
+     * Returns a list containing elements which are contained in both lists.
+     */
+    private List<RelatedTopic> getIntersection(List listA, List listB) {
+        if (listA == null) return listB;
+        return ListUtils.intersection(listA, listB);
+    }
+
+    /**
+     * Returns a list containing elements which are in any of the lists.
+     */
+    private List<RelatedTopic> getUnion(List listA, List listB) {
+        if (listA == null) return listB;
+        return ListUtils.union(listA, listB);
+    }
+
+    /**
      * Returns the union of all related topics for a complete category set.
      */
-    private List<RelatedTopic> fetchAllGeoObjects(CategorySet categorySet) {
-        List<RelatedTopic> relatedTopics = new ArrayList();
+    private List<RelatedTopic> uniteAllGeoObjects(CategorySet categorySet) {
+        List<RelatedTopic> relatedTopics = null;
         for (String categoryXmlId : categorySet) {
-            logger.info(">> Fetching all geo-objects for category "
-                    + categoryXmlId+ " (OR, " + categorySet.size() + " categories)");
             long catId = categoryTopic(categoryXmlId).getId();
             List<RelatedTopic> intermediaryList = fetchGeoObjectTopicsInFamportalCategory(catId);
-            relatedTopics.addAll(intermediaryList);
+            relatedTopics = getUnion(relatedTopics, intermediaryList);
+            logger.info("> Fetched all geo-objects for " +categorySet.size()+ " categories " + relatedTopics.size());
         }
         return relatedTopics;
     }
