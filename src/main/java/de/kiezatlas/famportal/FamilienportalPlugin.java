@@ -12,8 +12,8 @@ import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.model.SimpleValue;
 import de.deepamehta.core.osgi.PluginActivator;
-import de.deepamehta.core.service.Directives;
 import de.deepamehta.core.service.Inject;
+import de.deepamehta.core.service.Transactional;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -25,8 +25,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
+import org.apache.commons.collections4.ListUtils;
 
 
 
@@ -84,49 +87,57 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     public List<GeoObject> getGeoObjects(@QueryParam("category") List<CategorySet> categorySets,
                                          @QueryParam("proximity") ProximityFilter proximityFilter) {
         try {
-            if (categorySets.size() == 0) {
+            if (categorySets.isEmpty()) {
                 throw new RuntimeException("Missing the \"category\" parameter in request");
-            } else if (categorySets.size() > 1) {
-                throw new RuntimeException("Requests with more than 1 \"category\" parameter not yet supported");
             }
-            CategorySet categorySet = categorySets.get(0);
-            if (categorySet.size() > 1) {
-                throw new RuntimeException("More than 1 category per \"category\" parameter not yet supported");
+            List<List> topicLists = new ArrayList<List>();
+            List<RelatedTopic> relatedTopics = new ArrayList<RelatedTopic>();
+            // one or multi-categories OR
+            Iterator<CategorySet> iteratorSets = categorySets.iterator();
+            while (iteratorSets.hasNext()) {
+                CategorySet categorySet = iteratorSets.next();
+                // add up all geo objects related to all categories involved in this categoryset (OR)
+                if (categorySets.size() == 1) {
+                    logger.info("> Fetching the sum of all topics for this category-set "
+                            + "(OR, categorySetSize: "+categorySets.size()+").");
+                    relatedTopics = fetchAllGeoObjects(categorySet);
+                } else {
+                    logger.info("> Adding up the sum of topics in one category-set for "
+                            + "(AND, categorieSetSize: "+categorySets.size()+").");
+                    topicLists.add(fetchAllGeoObjects(categorySet));
+                }
             }
-            //
-            List<GeoObject> geoObjects = new ArrayList();
-            for (String categoryXmlId : categorySet) {
-                long catId = categoryTopic(categoryXmlId).getId();
-                for (Topic geoObjectTopic : kiezatlasService.getGeoObjectsByCategory(catId, false)) {
-                                                                                         // fetchComposite=false
-                    try {
-                        GeoCoordinate geoCoord = geoCoordinate(geoObjectTopic);
-                        // apply proximity filter
-                        if (proximityFilter != null) {
-                            double distance = geomapsService.getDistance(geoCoord, proximityFilter.geoCoordinate);
-                            if (distance > proximityFilter.radius) {
-                                continue;
-                            }
-                        }
-                        // add geo object to result
-                        geoObjects.add(createGeoObject(geoObjectTopic, geoCoord));
-                    } catch (Exception e) {
-                        logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
-                            geoObjectTopic.getSimpleValue() + "\") from result (" + e + ")");
+            // multi-category-sets AND
+            if (categorySets.size() > 1) {
+                logger.info("> Building the list of topics which are in all " + topicLists.size() + " collections.");
+                Iterator<List> topicCollections = topicLists.iterator();
+                while (topicCollections.hasNext()) {
+                    List<RelatedTopic> listA = topicCollections.next();
+                    if (topicCollections.hasNext()) { // even number of categorysets
+                        List<RelatedTopic> listB = topicCollections.next();
+                        relatedTopics.addAll(ListUtils.intersection(listA, listB));
+                        logger.info("> Building intersection of all elements in two category-sets (with +1).");
+                    } else { // odd number of categorysets
+                        relatedTopics.addAll(ListUtils.intersection(listA, relatedTopics));
+                        logger.info("> Building intersection of all elements in two category-sets (with the last).");
                     }
                 }
             }
-            return geoObjects;
+            // make resultlist only contain unique topics
+            List<RelatedTopic> uniqueTopics = new ArrayList(new HashSet(relatedTopics));
+            // apply proximity filter to our resultset and turn them into geo-objects
+            return applyProximityFilter(uniqueTopics, proximityFilter);
         } catch (Exception e) {
             throw new RuntimeException("Fetching geo objects failed (categorySets=" + categorySets + ")", e);
         }
     }
 
-    // --- Redationalwerkzeug ---
+    // --- Redaktionswerkzeug ---
 
     @PUT
     @Path("/category/{id}")
     @Override
+    @Transactional
     public void createAssignments(@PathParam("id") long famportalCategoryId,
                                   @QueryParam("geo_object") List<Long> geoObjectIds) {
         updateFacet(geoObjectIds, createFacetValue(famportalCategoryId));
@@ -135,6 +146,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @PUT
     @Path("/category/{id}/ka_cat")
     @Override
+    @Transactional
     public void createAssignmentsByCategories(@PathParam("id") long famportalCategoryId,
                                               @QueryParam("ka_cat") List<Long> kiezatlasCategoryIds) {
         updateFacetByCategories(kiezatlasCategoryIds, createFacetValue(famportalCategoryId));
@@ -145,6 +157,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @DELETE
     @Path("/category/{id}")
     @Override
+    @Transactional
     public void deleteAssignments(@PathParam("id") long famportalCategoryId,
                                   @QueryParam("geo_object") List<Long> geoObjectIds) {
         updateFacet(geoObjectIds, createDeletionFacetValue(famportalCategoryId));
@@ -153,6 +166,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @DELETE
     @Path("/category/{id}/ka_cat")
     @Override
+    @Transactional
     public void deleteAssignmentsByCategories(@PathParam("id") long famportalCategoryId,
                                               @QueryParam("ka_cat") List<Long> kiezatlasCategoryIds) {
         updateFacetByCategories(kiezatlasCategoryIds, createDeletionFacetValue(famportalCategoryId));
@@ -165,10 +179,9 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Override
     public GeoObjectCount countAssignments() {
         GeoObjectCount count = new GeoObjectCount();
-        for (Topic famportalCategory : dms.getTopics(FAMPORTAL_CATEGORY_URI, false, 0).getItems()) {
+        for (Topic famportalCategory : dms.getTopics(FAMPORTAL_CATEGORY_URI, 0).getItems()) {
             long famCatId = famportalCategory.getId();
-            count.addCount(famCatId, kiezatlasService.getGeoObjectsByCategory(famCatId, false).size());
-                                                                                     // fetchComposite=false
+            count.addCount(famCatId, kiezatlasService.getGeoObjectsByCategory(famCatId).size());
         }
         return count;
     }
@@ -178,10 +191,57 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     // ------------------------------------------------------------------------------------------------- Private Methods
 
     /**
+     * Returns the union of all related topics for a complete category set.
+     */
+    private List<RelatedTopic> fetchAllGeoObjects(CategorySet categorySet) {
+        List<RelatedTopic> relatedTopics = new ArrayList();
+        for (String categoryXmlId : categorySet) {
+            logger.info(">> Fetching all geo-objects for category "
+                    + categoryXmlId+ " (OR, " + categorySet.size() + " categories)");
+            long catId = categoryTopic(categoryXmlId).getId();
+            List<RelatedTopic> intermediaryList = fetchGeoObjectTopicsInFamportalCategory(catId);
+            relatedTopics.addAll(intermediaryList);
+        }
+        return relatedTopics;
+    }
+
+    /**
+     * Returns the list of RelatedTopics to the given Familienportal Category topic id.
+     */
+    private List<RelatedTopic> fetchGeoObjectTopicsInFamportalCategory(long catId) {
+        return kiezatlasService.getGeoObjectsByCategory(catId);
+    }
+
+    /**
+     * Filters the given list by proximity filter if such is no null and thus excludes topics related
+     * through a higher distance value (or all elements with invalid geo-coordinates).
+     */
+    private List<GeoObject> applyProximityFilter(List<RelatedTopic> geoObjects, ProximityFilter proximityFilter) {
+        logger.info("Applying proximityfilter to a list of " + geoObjects.size() + " geo-objects");
+        List<GeoObject> results = new ArrayList();
+        for (Topic geoObjectTopic : geoObjects) {
+            try {
+                GeoCoordinate geoCoord = geoCoordinate(geoObjectTopic);
+                if (proximityFilter != null) {
+                    double distance = geomapsService.getDistance(geoCoord, proximityFilter.geoCoordinate);
+                    if (distance > proximityFilter.radius) {
+                        continue;
+                    }
+                }
+                results.add(createGeoObject(geoObjectTopic, geoCoord));
+            } catch (Exception e) {
+                logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
+                    geoObjectTopic.getSimpleValue() + "\") from result (" + e + ")");
+            }
+        }
+        return results;
+    }
+
+    /**
      * Returns the Familienportal Kategorie topic that corresponds to the original Familienportal category XML ID.
      */
     private Topic categoryTopic(String famportalCategoryXmlId) {
-        Topic cat = dms.getTopic("uri", new SimpleValue(FAMPORTAL_CATEGORY_URI_PREFIX + famportalCategoryXmlId), false);
+        Topic cat = dms.getTopic("uri", new SimpleValue(FAMPORTAL_CATEGORY_URI_PREFIX + famportalCategoryXmlId));
         if (cat == null) {
             throw new RuntimeException("\"" + famportalCategoryXmlId + "\" is an unknown Familienportal category " +
                 "XML ID (no corresponding topic found)");
@@ -190,7 +250,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
     private GeoCoordinate geoCoordinate(Topic geoObjectTopic) {
-        Topic address = geoObjectTopic.getCompositeValue().getTopic("dm4.contacts.address");
+        Topic address = geoObjectTopic.getChildTopics().getTopic("dm4.contacts.address");
         GeoCoordinate geoCoord = geomapsService.getGeoCoordinate(address);
         if (geoCoord == null) {
             throw new RuntimeException("Geo coordinate is unknown");
@@ -271,17 +331,15 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     private void updateFacet(List<Long> geoObjectIds, FacetValue value) {
         for (long geoObjectId : geoObjectIds) {
-            facetsService.updateFacet(geoObjectId, FAMPORTAL_CATEGORY_FACET_URI, value, null);  // clientState=null
+            facetsService.updateFacet(geoObjectId, FAMPORTAL_CATEGORY_FACET_URI, value);
         }
     }
 
     private void updateFacetByCategories(List<Long> kiezatlasCategoryIds, FacetValue value) {
         for (long catId : kiezatlasCategoryIds) {
-            List<RelatedTopic> geoObjects = kiezatlasService.getGeoObjectsByCategory(catId, false);
-                                                                                         // fetchComposite=false
+            List<RelatedTopic> geoObjects = kiezatlasService.getGeoObjectsByCategory(catId);
             for (Topic geoObject : geoObjects) {
-                facetsService.updateFacet(geoObject, FAMPORTAL_CATEGORY_FACET_URI, value, null, new Directives());
-                                                                                                // clientState=null
+                facetsService.updateFacet(geoObject, FAMPORTAL_CATEGORY_FACET_URI, value);
             }
         }
     }

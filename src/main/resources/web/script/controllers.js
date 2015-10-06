@@ -178,8 +178,8 @@ angular.module("famportal").controller("editorialController", function($scope, $
     }
 
     function trustUserHTML(geoObject, childTypeUri) {
-        if (geoObject.composite[childTypeUri]) {
-            geoObject.composite[childTypeUri].value = $sce.trustAsHtml(geoObject.composite[childTypeUri].value)
+        if (geoObject.childs[childTypeUri]) {
+            geoObject.childs[childTypeUri].value = $sce.trustAsHtml(geoObject.childs[childTypeUri].value)
         }
     }
 })

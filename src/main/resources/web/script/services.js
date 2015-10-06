@@ -2,7 +2,7 @@ angular.module("famportal").service("famportalService", function($http) {
 
     this.getFamportalTree = function(callback) {
         var FAMPORTAL_ROOT = "famportal.root"
-        $http.get("/core/topic/by_value/uri/" + FAMPORTAL_ROOT).success(callback)
+        $http.get("/core/topic/by_value/uri/" + FAMPORTAL_ROOT + "?include_childs=true").success(callback)
     }
 
     this.getGeoObjectsByCategory = function(famportalCatId, callback) {

@@ -1,7 +1,6 @@
 package de.kiezatlas.famportal.migrations;
 
 import de.deepamehta.core.Topic;
-import de.deepamehta.core.service.Directives;
 import de.deepamehta.core.service.Migration;
 
 
@@ -13,8 +12,8 @@ public class Migration3 extends Migration {
 
     @Override
     public void run() {
-        for (Topic topic : dms.getTopics("famportal.category", false, 0).getItems()) {
-            topic.delete(new Directives());
+        for (Topic topic : dms.getTopics("famportal.category", 0).getItems()) {
+            topic.delete();
         }
     }
 }

@@ -4,14 +4,14 @@
             <strong>{{detailGeoObject.value}}</strong>
         </p>
         <p>
-            Website: {{detailGeoObject.composite['dm4.webbrowser.url'].value}}
+            Website: {{detailGeoObject.childs['dm4.webbrowser.url'].value}}
         </p>
-        <p ng-init="address=detailGeoObject.composite['dm4.contacts.address'].composite">
+        <p ng-init="address=detailGeoObject.childs['dm4.contacts.address'].childs">
             {{address["dm4.contacts.street"].value}}<br />
             {{address["dm4.contacts.postal_code"].value}} {{address["dm4.contacts.city"].value}}<br />
             {{address["dm4.contacts.country"].value}}
         </p>
-        <p ng-init="kontakt=detailGeoObject.composite['ka2.kontakt'].composite">
+        <p ng-init="kontakt=detailGeoObject.childs['ka2.kontakt'].childs">
             Telefon:            {{kontakt["ka2.kontakt.telefon"].value}}<br />
             Fax:                {{kontakt["ka2.kontakt.fax"].value}}<br />
             Ansprechpartner/in: {{kontakt["ka2.kontakt.ansprechpartner"].value}}<br />
@@ -19,7 +19,7 @@
         </p>
         <p>
             Öffnungszeiten:<br />
-            <span ng-bind-html="detailGeoObject.composite['ka2.oeffnungszeiten'].value"></span>
+            <span ng-bind-html="detailGeoObject.childs['ka2.oeffnungszeiten'].value"></span>
         </p>
         <p>
             <multi-facet child-type-uri="ka2.criteria.thema">Thema</multi-facet>
@@ -28,8 +28,8 @@
             <multi-facet child-type-uri="ka2.criteria.traeger">Träger</multi-facet>
             <multi-facet child-type-uri="ka2.criteria.ueberregional">Überregional</multi-facet>
         </p>
-        <div ng-bind-html="detailGeoObject.composite['ka2.beschreibung'].value"></div>
-        <p ng-init="traeger=detailGeoObject.composite['ka2.traeger'].composite">
+        <div ng-bind-html="detailGeoObject.childs['ka2.beschreibung'].value"></div>
+        <p ng-init="traeger=detailGeoObject.childs['ka2.traeger'].childs">
             Träger: {{traeger["ka2.traeger.name"].value}} ({{traeger["ka2.traeger.art"].value}})
         </p>
     </div>
