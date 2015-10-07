@@ -97,12 +97,9 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
                 // simply adding up all elements related to all categories (contains duplicates)
                 List<RelatedTopic> categoryList = uniteAllGeoObjects(categorySet);
                 // if there is something to intersect, do so
-                if (resultList != null) {
-                    logger.info(">> Intersecting " +resultList.size()+ " AND " +categoryList.size() +" geo objects");
-                    resultList = getIntersection(resultList, categoryList);
-                } else {
-                    resultList = categoryList;
-                }
+                int count = (resultList != null) ? resultList.size() : 0;
+                logger.info(">> Intersecting " + count + " geo objects with " +categoryList.size() + ", AND");
+                resultList = getIntersection(resultList, categoryList);
             }
             // make resultlist only contain unique topics
             List<RelatedTopic> uniqueList = new ArrayList(new HashSet(resultList));
@@ -196,7 +193,8 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             long catId = categoryTopic(categoryXmlId).getId();
             List<RelatedTopic> intermediaryList = fetchGeoObjectTopicsInFamportalCategory(catId);
             relatedTopics = getUnion(relatedTopics, intermediaryList);
-            logger.info("> Fetched all geo-objects for " +categorySet.size()+ " categories " + relatedTopics.size());
+            logger.info("> Fetched all geo-objects for " +categoryXmlId+ "among "
+                    +categorySet.size()+ " categories (" + relatedTopics.size() + ")");
         }
         return relatedTopics;
     }
