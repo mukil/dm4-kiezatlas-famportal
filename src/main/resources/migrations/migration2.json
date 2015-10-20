@@ -3,34 +3,34 @@
         {
             "uri":      "famportal.root",
             "type_uri": "famportal.category",
-            "composite": {
+            "childs": {
                 "famportal.category.name": "Familienportal Wurzel",
                 "famportal.category": [
                     {
                         "uri":      "famportal.category-eeeba040-1b09-47ba-aec9-2f3168c2ee8b-de_DE-1",
                         "type_uri": "famportal.category",
-                        "composite": {
+                        "childs": {
                             "famportal.category.name":  "Themen",
                             "famportal.category.order": 10,
                             "famportal.category": [
                                 {
                                     "uri": "famportal.category-38cb6746-1317-47e3-aaaa-5f176841e013-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Leben mit Kindern",
                                         "famportal.category.order": 10,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-84ba9b1e-16c7-44f8-8d83-f2add839f4fe-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Kinderwunsch",
                                                     "famportal.category.order": 10,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-b563c6ee-6784-457d-a0d1-027dfb4feefb-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Kinderwunschbehandlung",
                                                                 "famportal.category.order": 10
                                                             }
@@ -38,7 +38,7 @@
                                                         {
                                                             "uri":      "famportal.category-8f847ebe-cc17-4504-9b94-437521511cb7-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Adoption",
                                                                 "famportal.category.order": 20
                                                             }
@@ -46,7 +46,7 @@
                                                         {
                                                             "uri":      "famportal.category-d118c711-32bb-4b5a-83a7-be57f9109f88-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Pflegschaft",
                                                                 "famportal.category.order": 30
                                                             }
@@ -57,14 +57,14 @@
                                             {
                                                 "uri":      "famportal.category-8770ee6a-a0f8-4d79-be43-44995d342f9f-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Schwangerschaft",
                                                     "famportal.category.order": 20,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-c38c5a5c-faf3-4a90-94f6-b1f4d8bf0463-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Gesund in der Schwangerschaft",
                                                                 "famportal.category.order": 10
                                                             }
@@ -75,14 +75,14 @@
                                             {
                                                 "uri":      "famportal.category-856c0e7b-7b25-4d62-afb3-e81cd57f8535-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Geburt",
                                                     "famportal.category.order": 30,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-50c06d37-4fc9-416c-b654-251588b84287-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Die Geburt",
                                                                 "famportal.category.order": 10
                                                             }
@@ -90,14 +90,14 @@
                                                         {
                                                             "uri":      "famportal.category-61cd3e96-137f-4f2c-b986-1a7e3728dea1-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Nach der Geburt",
                                                                 "famportal.category.order": 20,
                                                                 "famportal.category": [
                                                                     {
                                                                         "uri":      "famportal.category-88d788f1-dd1e-40ab-b6c4-b9d723110e23-de_DE-1",
                                                                         "type_uri": "famportal.category",
-                                                                        "composite": {
+                                                                        "childs": {
                                                                             "famportal.category.name": "Was brauchen die Eltern?",
                                                                             "famportal.category.order": 10
                                                                         }
@@ -105,7 +105,7 @@
                                                                     {
                                                                         "uri":      "famportal.category-d29c513c-713b-401c-b7cf-7d76203c5e3a-de_DE-1",
                                                                         "type_uri": "famportal.category",
-                                                                        "composite": {
+                                                                        "childs": {
                                                                             "famportal.category.name": "Was braucht das Kind?",
                                                                             "famportal.category.order": 20
                                                                         }
@@ -119,7 +119,7 @@
                                             {
                                                 "uri":      "famportal.category-3283d87f-0d45-4995-b7e7-7237235b39b3-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Sorgerecht",
                                                     "famportal.category.order": 40
                                                 }
@@ -127,14 +127,14 @@
                                             {
                                                 "uri":      "famportal.category-392a4bdc-b1e9-4fbf-baec-562cb76e24ce-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Finanzielle Hilfen",
                                                     "famportal.category.order": 50,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-b0cfe9ce-9165-4682-853c-87ec18359c5f-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Allgemein",
                                                                 "famportal.category.order": 10
                                                             }
@@ -142,7 +142,7 @@
                                                         {
                                                             "uri":      "famportal.category-f26dfda2-c465-4fa0-a7ca-a62e89bb6d76-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Alleinerziehende",
                                                                 "famportal.category.order": 20
                                                             }
@@ -153,7 +153,7 @@
                                             {
                                                 "uri":      "famportal.category-1a9cc980-de8e-4afb-9957-537b5aee0b44-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Fr\u00fche Hilfen",
                                                     "famportal.category.order": 60
                                                 }
@@ -161,14 +161,14 @@
                                             {
                                                 "uri":      "famportal.category-61c41e5d-5f59-400d-9309-b48b59a33e54-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Kinderbetreuung",
                                                     "famportal.category.order": 70,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-6401682d-be80-47ac-b785-351e95d80f02-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Randzeitenbetreuung",
                                                                 "famportal.category.order": 10
                                                             }
@@ -179,7 +179,7 @@
                                             {
                                                 "uri":      "famportal.category-ca8524a1-e039-40d3-8fd4-12fba31fa1a7-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Hilfen zur Erziehung",
                                                     "famportal.category.order": 80
                                                 }
@@ -187,14 +187,14 @@
                                             {
                                                 "uri":      "famportal.category-812e4114-60fa-4582-9539-3accea8971e5-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Kinderschutz",
                                                     "famportal.category.order": 90,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-2373edaf-4dd0-42ca-af1e-59b1060eedf5-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Hilfen zur Erziehung",
                                                                 "famportal.category.order": 10
                                                             }
@@ -205,7 +205,7 @@
                                             {
                                                 "uri":      "famportal.category-a6aa1313-8915-40d7-b711-defe40c7a283-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Familienunterst\u00fctzende Angebote",
                                                     "famportal.category.order": 100
                                                 }
@@ -213,7 +213,7 @@
                                             {
                                                 "uri":      "famportal.category-c000ab8e-a5c2-4b7b-b43d-f422de4cb50e-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Feriengestaltung",
                                                     "famportal.category.order": 110
                                                 }
@@ -221,7 +221,7 @@
                                             {
                                                 "uri":      "famportal.category-eef1a1bc-8a6d-402e-8ef1-3cdb31fcea79-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Mehrgeneration",
                                                     "famportal.category.order": 120
                                                 }
@@ -229,7 +229,7 @@
                                             {
                                                 "uri":      "famportal.category-eb4334a7-fa20-4974-8a1c-052e8e0e1dd9-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Sprachf\u00f6rderung",
                                                     "famportal.category.order": 130
                                                 }
@@ -237,7 +237,7 @@
                                             {
                                                 "uri":      "famportal.category-91478c78-27a4-4d0b-9045-bb3a245847c8-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Familien mit behinderten Kindern",
                                                     "famportal.category.order": 140
                                                 }
@@ -245,7 +245,7 @@
                                             {
                                                 "uri":      "famportal.category-a1b169c1-74c1-4ff3-ab11-98df7e9e958b-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Vernetzungsm\u00f6glichkeiten f\u00fcr Eltern",
                                                     "famportal.category.order": 150
                                                 }
@@ -253,7 +253,7 @@
                                             {
                                                 "uri":      "famportal.category-b14b1cd5-4e26-4a47-b1a7-2ad1b06846c8-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Spielpl\u00e4tze",
                                                     "famportal.category.order": 160
                                                 }
@@ -264,14 +264,14 @@
                                 {
                                     "uri": "famportal.category-75f80558-7d6d-41e9-957e-4068432f1f93-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name":  "Bund f\u00fcrs Leben",
                                         "famportal.category.order": 20,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-162bf365-e6e4-496b-9e59-99ddd743d58d-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Ehe",
                                                     "famportal.category.order": 10
                                                 }
@@ -279,7 +279,7 @@
                                             {
                                                 "uri":      "famportal.category-2684b384-7928-45cb-ba9d-02fbd7b2549c-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Ehe\u00e4hnliche Gemeinschaft",
                                                     "famportal.category.order": 20
                                                 }
@@ -287,7 +287,7 @@
                                             {
                                                 "uri":      "famportal.category-923d76cb-ca8c-4b4b-976a-f0664dc6a70b-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Lebenspartnerschaft",
                                                     "famportal.category.order": 30
                                                 }
@@ -295,7 +295,7 @@
                                             {
                                                 "uri":      "famportal.category-e2b46f46-cb81-44e2-b1e9-768454f2820b-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Scheidung",
                                                     "famportal.category.order": 40
                                                 }
@@ -306,14 +306,14 @@
                                 {
                                     "uri": "famportal.category-73b99fe7-791b-4eb5-bb0d-381ee89f5040-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name":  "Beratung und Unterst\u00fctzung",
                                         "famportal.category.order": 30,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-9f3712f2-5b8c-43c9-9f2d-644b7c20ca5e-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Familien- und Erziehungsberatung",
                                                     "famportal.category.order": 10
                                                 }
@@ -321,14 +321,14 @@
                                             {
                                                 "uri":      "famportal.category-785087a8-08eb-4ff9-90fa-f73096e889aa-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Alltagspraktische Unterst\u00fctzung",
                                                     "famportal.category.order": 20,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-61c2f8b2-1e66-4546-8090-6ba8e8e4de47-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Haushaltsnahe Dienstleistungen",
                                                                 "famportal.category.order": 10
                                                             }
@@ -336,7 +336,7 @@
                                                         {
                                                             "uri":      "famportal.category-0fd999d9-a675-42e5-9b5f-d96f78e0383d-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Nachbarschaftliche Hilfe",
                                                                 "famportal.category.order": 20
                                                             }
@@ -344,7 +344,7 @@
                                                         {
                                                             "uri":      "famportal.category-dbea7325-9336-4c44-865d-3faed5ff7b0e-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Ehrenamtliche Hilfe",
                                                                 "famportal.category.order": 30
                                                             }
@@ -352,7 +352,7 @@
                                                         {
                                                             "uri":      "famportal.category-1a30a411-4de4-4edc-bd0a-854617654cc3-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Notfallbetreuung",
                                                                 "famportal.category.order": 40
                                                             }
@@ -363,7 +363,7 @@
                                             {
                                                 "uri":      "famportal.category-b576effb-64f1-4d0f-8ad8-1a6a69689caa-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Fr\u00fche Hilfen",
                                                     "famportal.category.order": 30
                                                 }
@@ -371,7 +371,7 @@
                                             {
                                                 "uri":      "famportal.category-68191b80-ab22-4a6f-a385-2fc229ce501a-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Anti-Diskriminierung",
                                                     "famportal.category.order": 40
                                                 }
@@ -379,14 +379,14 @@
                                             {
                                                 "uri":      "famportal.category-a916c978-d897-46f3-bbad-029829d2879d-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Migration",
                                                     "famportal.category.order": 50,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-d663e52b-5133-43f7-a5e2-f244054a1780-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Einb\u00fcrgerung",
                                                                 "famportal.category.order": 10
                                                             }
@@ -394,7 +394,7 @@
                                                         {
                                                             "uri":      "famportal.category-f640ad44-f509-4523-8257-6ee65523ebd2-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Sprachf\u00f6rderung",
                                                                 "famportal.category.order": 20
                                                             }
@@ -405,7 +405,7 @@
                                             {
                                                 "uri":      "famportal.category-488d0edb-2509-41a4-89f4-2b46e40d3774-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Beratung",
                                                     "famportal.category.order": 60
                                                 }
@@ -413,7 +413,7 @@
                                             {
                                                 "uri":      "famportal.category-72fc7823-ea85-47ea-8d0b-fa6a89a292c8-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "ARGE",
                                                     "famportal.category.order": 70
                                                 }
@@ -421,14 +421,14 @@
                                             {
                                                 "uri":      "famportal.category-c3d083a3-359b-42a4-81d5-fd6e3d0d77b3-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Inklusion",
                                                     "famportal.category.order": 80,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-dba42d00-11b7-4329-a46e-664a9ec5cf64-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Allgemeine Informationen",
                                                                 "famportal.category.order": 10
                                                             }
@@ -436,7 +436,7 @@
                                                         {
                                                             "uri":      "famportal.category-068413d0-b80e-49a4-832c-8a21aed0070b-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Bildungseinrichtungen",
                                                                 "famportal.category.order": 20
                                                             }
@@ -447,14 +447,14 @@
                                             {
                                                 "uri":      "famportal.category-5378d02e-fc8b-4758-9474-6a484e290c78-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Ruhestand",
                                                     "famportal.category.order": 90,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-4e979c4b-a466-413b-a1b1-c758ee710d6b-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Altersvorsorge",
                                                                 "famportal.category.order": 10
                                                             }
@@ -462,7 +462,7 @@
                                                         {
                                                             "uri":      "famportal.category-1a9935bd-e45e-49cb-be46-7dbf73900dd1-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Erben und Vererben",
                                                                 "famportal.category.order": 20
                                                             }
@@ -470,7 +470,7 @@
                                                         {
                                                             "uri":      "famportal.category-ae384744-571f-49fa-9e21-c7f649eca57c-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Pflege",
                                                                 "famportal.category.order": 30
                                                             }
@@ -481,14 +481,14 @@
                                             {
                                                 "uri":      "famportal.category-c7b2d3dc-4205-46c0-a4b8-38d7cded5a13-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Wohnen",
                                                     "famportal.category.order": 100,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-73f9ce20-0753-4024-bea3-08e564e3166b-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Umzug",
                                                                 "famportal.category.order": 10
                                                             }
@@ -496,7 +496,7 @@
                                                         {
                                                             "uri":      "famportal.category-b2b67791-d272-495b-b19e-1edc7725ef09-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Wohnungsprobleme",
                                                                 "famportal.category.order": 20
                                                             }
@@ -504,7 +504,7 @@
                                                         {
                                                             "uri":      "famportal.category-487f2847-208f-46f5-806c-d0da69414470-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Mehrgenerationenwohnen",
                                                                 "famportal.category.order": 30
                                                             }
@@ -512,7 +512,7 @@
                                                         {
                                                             "uri":      "famportal.category-e72a948a-98d8-43f5-bec7-9709677e1bff-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Wohnungsbaugesellschaften",
                                                                 "famportal.category.order": 40
                                                             }
@@ -523,7 +523,7 @@
                                             {
                                                 "uri":      "famportal.category-ef933d38-4be2-44f7-9b21-04bf111edcfe-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Finanzielle Unterst\u00fctzung",
                                                     "famportal.category.order": 110
                                                 }
@@ -531,7 +531,7 @@
                                             {
                                                 "uri":      "famportal.category-043dceb3-4a8c-43e9-823e-895a91d753d1-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Rechtliche Angebote",
                                                     "famportal.category.order": 120
                                                 }
@@ -542,14 +542,14 @@
                                 {
                                     "uri": "famportal.category-8d2fb08a-4ffb-4ff6-a0e1-aa5fc4f8dad9-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name":  "Gesundheit",
                                         "famportal.category.order": 40,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-7bd0a3b3-0143-42e5-9cea-9e73ca66abe8-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Pr\u00E4vention",
                                                     "famportal.category.order": 10
                                                 }
@@ -557,7 +557,7 @@
                                             {
                                                 "uri":      "famportal.category-f8c7226d-d112-4d26-bbae-e794f04c1532-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Krankheit",
                                                     "famportal.category.order": 20
                                                 }
@@ -565,7 +565,7 @@
                                             {
                                                 "uri":      "famportal.category-5acfcabd-df10-49da-8e59-24ea399cced6-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Pflege",
                                                     "famportal.category.order": 30
                                                 }
@@ -573,7 +573,7 @@
                                             {
                                                 "uri":      "famportal.category-e3bb449d-7d25-4710-b19a-3b8acfa13929-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Behinderung",
                                                     "famportal.category.order": 40
                                                 }
@@ -581,14 +581,14 @@
                                             {
                                                 "uri":      "famportal.category-00f05f85-dad0-4f64-ab56-bab0056f5207-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Sterbefall",
                                                     "famportal.category.order": 50,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-393f418d-b9e2-48b4-8766-2641ddbf168b-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Erben und Vererben",
                                                                 "famportal.category.order": 10
                                                             }
@@ -596,7 +596,7 @@
                                                         {
                                                             "uri":      "famportal.category-af239362-197b-4c66-aa44-f10c03c510b7-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "\u00DCberf\u00fchrung",
                                                                 "famportal.category.order": 20
                                                             }
@@ -610,14 +610,14 @@
                                 {
                                     "uri": "famportal.category-9e125335-8be4-401d-ba3a-82d61391883b-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name":  "Notlagen",
                                         "famportal.category.order": 50,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-84a3fa4a-a580-4c1f-a3cf-8d68f818f6c0-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "H\u00e4usliche Gewalt",
                                                     "famportal.category.order": 10
                                                 }
@@ -625,7 +625,7 @@
                                             {
                                                 "uri":      "famportal.category-9abc6032-62c9-48a3-af9b-e9cd3931330b-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Notfall",
                                                     "famportal.category.order": 20
                                                 }
@@ -633,7 +633,7 @@
                                             {
                                                 "uri":      "famportal.category-2011f75d-a612-4bf1-a205-c38042ec2444-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Famili\u00e4re Krisen",
                                                     "famportal.category.order": 30
                                                 }
@@ -641,7 +641,7 @@
                                             {
                                                 "uri":      "famportal.category-3a976968-9780-4480-8515-bbeb6b102c49-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Kinderschutz",
                                                     "famportal.category.order": 40
                                                 }
@@ -649,7 +649,7 @@
                                             {
                                                 "uri":      "famportal.category-503f34cd-5832-4859-b3dd-d4e75144850b-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "gesundheitliche Notlagen",
                                                     "famportal.category.order": 50
                                                 }
@@ -657,7 +657,7 @@
                                             {
                                                 "uri":      "famportal.category-3b138f6d-6beb-42d5-af08-6da057f4a43f-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Wohnungsprobleme",
                                                     "famportal.category.order": 60
                                                 }
@@ -665,14 +665,14 @@
                                             {
                                                 "uri":      "famportal.category-033c72fd-849d-4118-9643-4c370a0ba0db-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Finanzielle Notlagen",
                                                     "famportal.category.order": 70,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-8300c865-55fb-4229-86b0-e0ada560ae73-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Schulden",
                                                                 "famportal.category.order": 10
                                                             }
@@ -683,7 +683,7 @@
                                             {
                                                 "uri":      "famportal.category-716977f9-d5fb-4444-8134-ca48c09b9617-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "rechtliche Notlagen",
                                                     "famportal.category.order": 80
                                                 }
@@ -691,7 +691,7 @@
                                             {
                                                 "uri":      "famportal.category-ba47fbef-0972-4171-8f66-af07beea3f19-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Opferschutz und Opferhilfe",
                                                     "famportal.category.order": 90
                                                 }
@@ -699,7 +699,7 @@
                                             {
                                                 "uri":      "famportal.category-0a36777b-abae-41c9-b58a-c7af78d670fb-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Sekten und Psychogruppen",
                                                     "famportal.category.order": 100
                                                 }
@@ -707,7 +707,7 @@
                                             {
                                                 "uri":      "famportal.category-9a7ca8c8-080b-45c0-91da-2a5e2cde6373-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Flucht und Asyl",
                                                     "famportal.category.order": 110
                                                 }
@@ -715,7 +715,7 @@
                                             {
                                                 "uri":      "famportal.category-6949e4b7-0a0f-4a87-870f-a00d77365950-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Verlust von Dokumenten",
                                                     "famportal.category.order": 120
                                                 }
@@ -726,14 +726,14 @@
                                 {
                                     "uri": "famportal.category-129f4d2c-c86a-4825-9df9-464dfd43fa86-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name":  "Ausbildung und Beruf",
                                         "famportal.category.order": 60,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-d04e6f04-cb04-4a56-a3e3-445805f158a5-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Schulen",
                                                     "famportal.category.order": 10
                                                 }
@@ -741,14 +741,14 @@
                                             {
                                                 "uri":      "famportal.category-1f3702bf-f6ef-4d47-8765-b557f533ae66-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Nach der Schule",
                                                     "famportal.category.order": 20,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-38988b90-9070-4bcf-a2f2-4f7bc7d6c516-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Berufsorientierung",
                                                                 "famportal.category.order": 10
                                                             }
@@ -756,7 +756,7 @@
                                                         {
                                                             "uri":      "famportal.category-b21198fd-87e3-4c9a-b2a4-0c16143539f6-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Freiwilligendienst",
                                                                 "famportal.category.order": 20
                                                             }
@@ -764,14 +764,14 @@
                                                         {
                                                             "uri":      "famportal.category-e4574660-5839-4ed9-8902-ef1bfc3f3b71-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Ausbildung",
                                                                 "famportal.category.order": 30,
                                                                 "famportal.category": [
                                                                     {
                                                                         "uri":      "famportal.category-d5c865e3-addf-423b-a6ee-51ced21f3dc1-de_DE-1",
                                                                         "type_uri": "famportal.category",
-                                                                        "composite": {
+                                                                        "childs": {
                                                                             "famportal.category.name": "Ausbildungspl\u00e4tze",
                                                                             "famportal.category.order": 10
                                                                         }
@@ -779,7 +779,7 @@
                                                                     {
                                                                         "uri":      "famportal.category-68f6ade8-ea55-458e-a59a-d7a452523994-de_DE-1",
                                                                         "type_uri": "famportal.category",
-                                                                        "composite": {
+                                                                        "childs": {
                                                                             "famportal.category.name": "Jugendberufshilfe",
                                                                             "famportal.category.order": 20
                                                                         }
@@ -790,14 +790,14 @@
                                                         {
                                                             "uri":      "famportal.category-ad83f9e3-b98e-4b34-ae34-a7545f52135f-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Studium",
                                                                 "famportal.category.order": 40,
                                                                 "famportal.category": [
                                                                     {
                                                                         "uri":      "famportal.category-91903745-1d66-4f81-82b0-8f2cf9aca6ff-de_DE-1",
                                                                         "type_uri": "famportal.category",
-                                                                        "composite": {
+                                                                        "childs": {
                                                                             "famportal.category.name": "Allgemein",
                                                                             "famportal.category.order": 10
                                                                         }
@@ -805,7 +805,7 @@
                                                                     {
                                                                         "uri":      "famportal.category-ce24af1d-a49a-4189-a88e-ee9cf504866c-de_DE-1",
                                                                         "type_uri": "famportal.category",
-                                                                        "composite": {
+                                                                        "childs": {
                                                                             "famportal.category.name": "Studieren mit Kind",
                                                                             "famportal.category.order": 20
                                                                         }
@@ -819,14 +819,14 @@
                                             {
                                                 "uri":      "famportal.category-192af8c8-5dd0-4a32-8301-da17f0ae8eee-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Vereinbarkeit Familie und Beruf",
                                                     "famportal.category.order": 30,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-eaac8b02-c1ce-4fa9-aee4-4c039a6f75da-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Wiedereinstieg in den Beruf",
                                                                 "famportal.category.order": 10
                                                             }
@@ -834,7 +834,7 @@
                                                         {
                                                             "uri":      "famportal.category-ca58453a-9d41-44c9-a589-9142d0d33110-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Kinderbetreuung",
                                                                 "famportal.category.order": 20
                                                             }
@@ -842,7 +842,7 @@
                                                         {
                                                             "uri":      "famportal.category-ea32db38-9f80-48e4-b6ba-a8fd57a7a10c-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Gemeinsame Deklaration",
                                                                 "famportal.category.order": 30
                                                             }
@@ -853,7 +853,7 @@
                                             {
                                                 "uri":      "famportal.category-cfe069d1-b1c8-42fc-aa12-99a6716f21bd-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Weiterbildung",
                                                     "famportal.category.order": 40
                                                 }
@@ -861,7 +861,7 @@
                                             {
                                                 "uri":      "famportal.category-9ea5c3b1-1d56-4aea-9c8d-04fce14763b5-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Medienkompetenz",
                                                     "famportal.category.order": 50
                                                 }
@@ -872,14 +872,14 @@
                                 {
                                     "uri":      "famportal.category-523a3b70-a3e9-404e-95f8-822387c8968e-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Freizeit und Kultur",
                                         "famportal.category.order": 70,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-be8c6d22-5f06-42a6-95e7-5ce4e59e78b4-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Feriengestaltung",
                                                     "famportal.category.order": 10
                                                 }
@@ -887,7 +887,7 @@
                                             {
                                                 "uri":      "famportal.category-cb839f3b-df99-4174-8c43-3270f593dfd1-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Freizeiteinrichtungen",
                                                     "famportal.category.order": 20
                                                 }
@@ -895,7 +895,7 @@
                                             {
                                                 "uri":      "famportal.category-e0c8119d-02b7-467a-b167-920a9885fbd5-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Kultureinrichtungen",
                                                     "famportal.category.order": 30
                                                 }
@@ -903,7 +903,7 @@
                                             {
                                                 "uri":      "famportal.category-1fe37c98-cc7f-48e9-8e8e-610e0368a00f-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Termine / Veranstaltungen",
                                                     "famportal.category.order": 40
                                                 }
@@ -911,7 +911,7 @@
                                             {
                                                 "uri":      "famportal.category-b32cb4f8-2dbe-48a8-a69a-eedf4b721b79-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Vereine",
                                                     "famportal.category.order": 50
                                                 }
@@ -919,7 +919,7 @@
                                             {
                                                 "uri":      "famportal.category-f417c101-df6a-4c06-a9cf-d0f377e8b852-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Bibliotheken",
                                                     "famportal.category.order": 60
                                                 }
@@ -927,7 +927,7 @@
                                             {
                                                 "uri":      "famportal.category-108b62de-73d1-42d0-8364-762ce99c3e4f-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Sportangebote",
                                                     "famportal.category.order": 70
                                                 }
@@ -935,7 +935,7 @@
                                             {
                                                 "uri":      "famportal.category-1325b056-2e32-40ee-8458-a4030b2354da-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Gemeinwesenorientierte Angebote",
                                                     "famportal.category.order": 80
                                                 }
@@ -943,7 +943,7 @@
                                             {
                                                 "uri":      "famportal.category-8a08515a-4b55-4edc-a541-dbf3b1741180-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Veranstaltungsr\u00e4ume f\u00fcr Familien",
                                                     "famportal.category.order": 90
                                                 }
@@ -951,14 +951,14 @@
                                             {
                                                 "uri":      "famportal.category-6bde4740-800d-4f2e-b537-1114cb67cf0a-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Ehrenamt",
                                                     "famportal.category.order": 100,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-eae0f75c-6290-4aab-b135-f8b16327f8dc-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Elternvertretung",
                                                                 "famportal.category.order": 100
                                                             }
@@ -972,14 +972,14 @@
                                 {
                                     "uri":      "famportal.category-758f4b56-cded-4512-8ab1-23fa202d0dc4-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Demokratief\u00f6rderung und Partizipation",
                                         "famportal.category.order": 80,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-2da15e2a-8dd4-4971-866f-625446f3d1bd-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Netzwerke und B\u00fcndnisse",
                                                     "famportal.category.order": 10
                                                 }
@@ -993,21 +993,21 @@
                     {
                         "uri":      "famportal.category-001a8556-7d98-44b5-84a8-9994da9a840e-de_DE-1",
                         "type_uri": "famportal.category",
-                        "composite": {
+                        "childs": {
                             "famportal.category.name": "Lebenslagen",
                             "famportal.category.order": 20,
                             "famportal.category": [
                                 {
                                     "uri":      "famportal.category-a3484a46-30c4-475e-aa7b-6e3ce9feef15-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Jung sein und \u00e4lter werden",
                                         "famportal.category.order": 10,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-944b5b2d-e928-466b-bf63-b54785024417-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Kindheit",
                                                     "famportal.category.order": 10
                                                 }
@@ -1015,7 +1015,7 @@
                                             {
                                                 "uri":      "famportal.category-18357bdb-a11d-4b59-83fb-b99eb7296314-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Vorschulalter",
                                                     "famportal.category.order": 20
                                                 }
@@ -1023,7 +1023,7 @@
                                             {
                                                 "uri":      "famportal.category-668007ac-6b33-40bc-a68b-79e5194e4ee6-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Schulzeit",
                                                     "famportal.category.order": 30
                                                 }
@@ -1031,7 +1031,7 @@
                                             {
                                                 "uri":      "famportal.category-f924a74b-3ac7-4eb2-8bf9-cdb163d477f0-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Jugend",
                                                     "famportal.category.order": 40
                                                 }
@@ -1039,7 +1039,7 @@
                                             {
                                                 "uri":      "famportal.category-a2eeb171-bf5f-4b6a-8586-35d1e9b89b95-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Erwachsen werden",
                                                     "famportal.category.order": 50
                                                 }
@@ -1047,7 +1047,7 @@
                                             {
                                                 "uri":      "famportal.category-06ae9671-d9f1-4e52-a198-9467da0f8c61-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Erwachsen sein",
                                                     "famportal.category.order": 60
                                                 }
@@ -1055,14 +1055,14 @@
                                             {
                                                 "uri":      "famportal.category-72fb50c9-3949-49e1-8e99-941721f3818a-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Ruhestand",
                                                     "famportal.category.order": 70,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-2b47b420-f9b3-4ec6-83af-7652295d720a-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Erben und Vererben",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1076,21 +1076,21 @@
                                 {
                                     "uri":      "famportal.category-b9c2c581-c55d-4620-9f71-5faf54b21582-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Familie sein",
                                         "famportal.category.order": 20,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-2c855f15-cdfc-45f1-9abb-5dc5b84b65ae-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Rund um die Geburt",
                                                     "famportal.category.order": 10,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-0924d829-d753-43a8-abb5-b1fc2ea54499-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Schwangerschaft",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1098,7 +1098,7 @@
                                                         {
                                                             "uri":      "famportal.category-3e65ffd8-3970-4410-a79d-bc9fe0e5eb55-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Geburt",
                                                                 "famportal.category.order": 20
                                                             }
@@ -1106,7 +1106,7 @@
                                                         {
                                                             "uri":      "famportal.category-98b31414-3c7c-4eac-a59d-51e888e4a7bf-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Das erste Jahr",
                                                                 "famportal.category.order": 30
                                                             }
@@ -1117,14 +1117,14 @@
                                             {
                                                 "uri":      "famportal.category-95c406fb-16b4-45e4-a9ea-7c3d853244fa-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Elternschaft",
                                                     "famportal.category.order": 20,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-099142a9-a36d-4af4-b410-c46c073b0c34-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Fr\u00fche Elternschaft",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1132,7 +1132,7 @@
                                                         {
                                                             "uri":      "famportal.category-da23c321-e836-4a51-96c0-110909c17f3e-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Mutterschaft",
                                                                 "famportal.category.order": 20
                                                             }
@@ -1140,7 +1140,7 @@
                                                         {
                                                             "uri":      "famportal.category-ba6c830b-0fb7-4b83-85b3-81ca25c20aa3-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Vaterschaft",
                                                                 "famportal.category.order": 30
                                                             }
@@ -1151,7 +1151,7 @@
                                             {
                                                 "uri":      "famportal.category-0dea26b2-b024-4f46-9238-48e0de01ccd7-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Kinderwunsch",
                                                     "famportal.category.order": 30
                                                 }
@@ -1159,14 +1159,14 @@
                                             {
                                                 "uri":      "famportal.category-5e8ae0c2-f9c8-46b5-85ea-21e23c8ddbb2-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Ehe",
                                                     "famportal.category.order": 40,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-9072ea5c-bb36-4306-ba6e-d93f8b225406-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Lebenspartnerschaft",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1174,7 +1174,7 @@
                                                         {
                                                             "uri":      "famportal.category-8135b2cb-1eec-4bd0-970d-82b53cb89cb7-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Ehe\u00e4hnliche Gemeinschaft",
                                                                 "famportal.category.order": 20
                                                             }
@@ -1182,14 +1182,14 @@
                                                         {
                                                             "uri":      "famportal.category-380bfbe2-fc40-40a3-8634-1bc831c318d1-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Scheidung",
                                                                 "famportal.category.order": 30,
                                                                 "famportal.category": [
                                                                     {
                                                                         "uri":      "famportal.category-b2bb0691-5efb-440e-b810-f800bdf6bea1-de_DE-1",
                                                                         "type_uri": "famportal.category",
-                                                                        "composite": {
+                                                                        "childs": {
                                                                             "famportal.category.name": "Sorgerecht",
                                                                             "famportal.category.order": 10
                                                                         }
@@ -1203,7 +1203,7 @@
                                             {
                                                 "uri":      "famportal.category-80732e26-a0ed-44b3-af50-dd75b88b5c7a-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Alleinerziehend",
                                                     "famportal.category.order": 50
                                                 }
@@ -1211,7 +1211,7 @@
                                             {
                                                 "uri":      "famportal.category-dcac510c-3345-4e1a-9f4f-cfeba3393691-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Verwandtschaft",
                                                     "famportal.category.order": 60
                                                 }
@@ -1222,14 +1222,14 @@
                                 {
                                     "uri":      "famportal.category-0569e35a-abfc-423a-97fd-033c563135a4-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Gefordert sein",
                                         "famportal.category.order": 30,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-d3116f37-325a-41de-a44c-f5142764680a-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Kinderschutzfall",
                                                     "famportal.category.order": 10
                                                 }
@@ -1237,7 +1237,7 @@
                                             {
                                                 "uri":      "famportal.category-9428d6a0-28dd-4a7f-bd29-9804c4c9f214-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Opfer von Gewalttaten",
                                                     "famportal.category.order": 20
                                                 }
@@ -1245,7 +1245,7 @@
                                             {
                                                 "uri":      "famportal.category-341ad245-e6a7-4d9a-b7f4-d15f220dd71b-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Wohnungsnot",
                                                     "famportal.category.order": 30
                                                 }
@@ -1253,14 +1253,14 @@
                                             {
                                                 "uri":      "famportal.category-bd98e304-b09c-46c0-a4ff-3d2d8665632d-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Finanzielle Not",
                                                     "famportal.category.order": 40,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-060ed155-33ab-4c91-9195-8247ef8ae027-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Verschuldung",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1271,14 +1271,14 @@
                                             {
                                                 "uri":      "famportal.category-64447390-7be6-4d3f-b9fc-3e00b79940aa-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Umzug",
                                                     "famportal.category.order": 50,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-cebca6db-e2b4-4ba8-a081-e28a97553f49-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Neu in der Stadt",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1289,14 +1289,14 @@
                                             {
                                                 "uri":      "famportal.category-92c99dfe-40fa-4e25-a38d-f4ff0cd8aedb-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Sterbefall",
                                                     "famportal.category.order": 60,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-c010b2eb-604f-4f86-9702-84372bcb6fbe-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Hinterbliebene/r sein",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1310,14 +1310,14 @@
                                 {
                                     "uri":      "famportal.category-9679c5b3-1f16-4852-9192-5a2a22139c75-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Lernen und Arbeiten",
                                         "famportal.category.order": 40,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-7fe5dc59-062e-4779-aa00-1a19d5ff134e-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Schulkinder",
                                                     "famportal.category.order": 10
                                                 }
@@ -1325,14 +1325,14 @@
                                             {
                                                 "uri":      "famportal.category-0786ead6-7bff-444a-aad8-5f5951d44fc1-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Nach der Schule",
                                                     "famportal.category.order": 20,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-e6525275-1976-4688-9271-a0d7f13a7bce-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "\u00dcbergang Schule - Beruf",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1343,7 +1343,7 @@
                                             {
                                                 "uri":      "famportal.category-1cbd5eec-37c5-4411-8ac7-12560cfbcc86-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Ausbildung",
                                                     "famportal.category.order": 30
                                                 }
@@ -1351,7 +1351,7 @@
                                             {
                                                 "uri":      "famportal.category-2f6dc21e-19fb-4e74-bee3-772362d0543a-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Studium",
                                                     "famportal.category.order": 40
                                                 }
@@ -1359,7 +1359,7 @@
                                             {
                                                 "uri":      "famportal.category-5384fa3b-c3e2-47d4-8132-cddb58c082f8-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Weiterbildung",
                                                     "famportal.category.order": 50
                                                 }
@@ -1367,7 +1367,7 @@
                                             {
                                                 "uri":      "famportal.category-50685a5a-7fdc-4ffb-bebf-4ae986c0ed06-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Wiedereinstieg in den Beruf",
                                                     "famportal.category.order": 60
                                                 }
@@ -1378,14 +1378,14 @@
                                 {
                                     "uri":      "famportal.category-70cf52ac-5dae-4edf-9c98-28fb51f311e4-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "F\u00fcr sich und andere sorgen",
                                         "famportal.category.order": 50,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-b2ccb084-8a32-47cd-8e0a-31f0458ec089-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Gesund leben",
                                                     "famportal.category.order": 10
                                                 }
@@ -1393,7 +1393,7 @@
                                             {
                                                 "uri":      "famportal.category-a920b9a2-00cf-472a-afcb-f0932f020471-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Leben mit einer Behinderung",
                                                     "famportal.category.order": 20
                                                 }
@@ -1401,7 +1401,7 @@
                                             {
                                                 "uri":      "famportal.category-a35d020c-0462-4142-b534-1a96b92dcff1-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Inklusiv leben",
                                                     "famportal.category.order": 30
                                                 }
@@ -1409,14 +1409,14 @@
                                             {
                                                 "uri":      "famportal.category-c9783553-68d3-434d-8068-098daeeb5347-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Pflege von Angeh\u00f6rigen",
                                                     "famportal.category.order": 40,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-2e6b91ee-7ca6-4c7c-9e0c-c0d16cae4d53-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Pflegen",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1424,7 +1424,7 @@
                                                         {
                                                             "uri":      "famportal.category-d20eb048-c01b-4611-b5b7-16e7ccc5a052-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Gepflegt werden",
                                                                 "famportal.category.order": 20
                                                             }
@@ -1435,14 +1435,14 @@
                                             {
                                                 "uri":      "famportal.category-4ba9f5d4-6902-4c09-856f-0d0d51cff736-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Vorsorge f\u00fcr Krankheit, Unfall, Tod",
                                                     "famportal.category.order": 50,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-15975f94-fcfb-4390-aa56-4fd9754f696b-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Vormundschaft",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1453,7 +1453,7 @@
                                             {
                                                 "uri":      "famportal.category-cc33047b-dd5b-4461-8bd4-0668a02cd6c9-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Minderheit",
                                                     "famportal.category.order": 60
                                                 }
@@ -1461,7 +1461,7 @@
                                             {
                                                 "uri":      "famportal.category-571e5a59-0654-4a60-b817-8fff0a1e1685-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Freiwillig t\u00e4tig sein",
                                                     "famportal.category.order": 60
                                                 }
@@ -1472,14 +1472,14 @@
                                 {
                                     "uri":      "famportal.category-e5bb81f3-af21-4649-a659-9ad4cc55c371-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Arbeitslos sein",
                                         "famportal.category.order": 60,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-3796f63c-8cee-43a6-970d-932400b635a9-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Finanzielle Hilfen",
                                                     "famportal.category.order": 10
                                                 }
@@ -1487,7 +1487,7 @@
                                             {
                                                 "uri":      "famportal.category-77fc94a9-77fa-4c97-9c9e-19b453d66547-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Wege aus der Arbeitslosigkeit",
                                                     "famportal.category.order": 20
                                                 }
@@ -1501,21 +1501,21 @@
                     {
                         "uri":      "famportal.category-6137b3ce-f5cf-485b-9cb4-ceff3c85b42b-de_DE-1",
                         "type_uri": "famportal.category",
-                        "composite": {
+                        "childs": {
                             "famportal.category.name": "Familie+",
                             "famportal.category.order": 30,
                             "famportal.category": [
                                 {
                                     "uri":      "famportal.category-c259f7f9-a99c-4b27-bd52-854418f5d216-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Familien mit Kindern",
                                         "famportal.category.order": 10,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-9fb3cfb5-a929-4de0-9047-7e16545dd335-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Familien mit Kindern",
                                                     "famportal.category.order": 10
                                                 }
@@ -1523,7 +1523,7 @@
                                             {
                                                 "uri":      "famportal.category-083bad85-c766-4d03-ba7c-4759fdb337f2-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Patchworkfamilien",
                                                     "famportal.category.order": 20
                                                 }
@@ -1531,7 +1531,7 @@
                                             {
                                                 "uri":      "famportal.category-d5618528-461b-4770-af37-293fa3b7648b-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Alleinerziehende",
                                                     "famportal.category.order": 30
                                                 }
@@ -1539,14 +1539,14 @@
                                             {
                                                 "uri":      "famportal.category-55fb38b5-0d05-44f3-9ac0-b2f6e4bdd670-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Regenbogenfamilie",
                                                     "famportal.category.order": 40,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-134f784c-2e82-41ee-a416-4b1e4aa8b8dc-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Schwule Eltern",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1554,7 +1554,7 @@
                                                         {
                                                             "uri":      "famportal.category-2c61f991-f72a-4810-9b59-ae812e2ff584-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Lesbische Eltern",
                                                                 "famportal.category.order": 20
                                                             }
@@ -1562,7 +1562,7 @@
                                                         {
                                                             "uri":      "famportal.category-7ff8b9bd-0e37-44f5-ab6f-06639cc0447e-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Transidente Eltern",
                                                                 "famportal.category.order": 30
                                                             }
@@ -1573,7 +1573,7 @@
                                             {
                                                 "uri":      "famportal.category-3d1ea8f9-854a-4e3f-be56-b64e06deb681-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Adoptiveltern",
                                                     "famportal.category.order": 50
                                                 }
@@ -1581,7 +1581,7 @@
                                             {
                                                 "uri":      "famportal.category-9c7249d7-44f0-402c-955d-6c3e76736004-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Pflegeeltern",
                                                     "famportal.category.order": 60
                                                 }
@@ -1589,7 +1589,7 @@
                                             {
                                                 "uri":      "famportal.category-0003e008-4b9a-4b74-bd6c-cc75d864688b-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Migrantische Familien",
                                                     "famportal.category.order": 70
                                                 }
@@ -1597,7 +1597,7 @@
                                             {
                                                 "uri":      "famportal.category-2b9aa9a1-0b45-4bea-b783-1c068a725bee-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Sozial schwache Familien",
                                                     "famportal.category.order": 80
                                                 }
@@ -1605,7 +1605,7 @@
                                             {
                                                 "uri":      "famportal.category-c6c00b69-c83d-4cf8-b798-33d6a6c8bb69-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Wochenendeltern",
                                                     "famportal.category.order": 90
                                                 }
@@ -1616,14 +1616,14 @@
                                 {
                                     "uri":      "famportal.category-1c877c72-344a-4e2f-a5fa-802d4a0bed1f-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Familienphasen",
                                         "famportal.category.order": 20,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-014e3716-0b0e-4656-9847-35d2004c062f-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Werdende Eltern",
                                                     "famportal.category.order": 10
                                                 }
@@ -1631,7 +1631,7 @@
                                             {
                                                 "uri":      "famportal.category-d0167bbf-5cf6-4097-8e03-543a1ea15325-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Familien mit kleinen Kindern",
                                                     "famportal.category.order": 20
                                                 }
@@ -1639,7 +1639,7 @@
                                             {
                                                 "uri":      "famportal.category-b7b85cb4-5695-4e8c-8924-7fa53ed5c9ef-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Familien mit Kindern im Vorschulalter",
                                                     "famportal.category.order": 30
                                                 }
@@ -1647,7 +1647,7 @@
                                             {
                                                 "uri":      "famportal.category-6dda5f64-7337-433b-9ccd-b0ce39157837-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Familien mit Schulkindern",
                                                     "famportal.category.order": 40
                                                 }
@@ -1655,7 +1655,7 @@
                                             {
                                                 "uri":      "famportal.category-91032c27-6ab3-42dd-9706-b8c9d5dc20ac-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Familien mit zu pflegenden Angeh\u00f6rigen",
                                                     "famportal.category.order": 50
                                                 }
@@ -1666,14 +1666,14 @@
                                 {
                                     "uri":      "famportal.category-6145a3db-085a-4091-853b-e2e0443e38a7-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Familienmenschen",
                                         "famportal.category.order": 30,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-7a287d4d-1e39-4417-a3f7-1f2b0343a851-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Kinder",
                                                     "famportal.category.order": 10
                                                 }
@@ -1681,7 +1681,7 @@
                                             {
                                                 "uri":      "famportal.category-9f7beac5-f28d-4af4-b016-d508de2b4173-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Jugendliche",
                                                     "famportal.category.order": 20
                                                 }
@@ -1689,14 +1689,14 @@
                                             {
                                                 "uri":      "famportal.category-00373432-f281-4b6a-bec0-5585290cbdb2-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Eltern",
                                                     "famportal.category.order": 30,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-8608ffdc-ef86-4a31-bc78-cb88697d8f46-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "M\u00fctter",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1704,7 +1704,7 @@
                                                         {
                                                             "uri":      "famportal.category-5ede549f-44a4-4d89-ac33-d442a9942f5e-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "V\u00e4ter",
                                                                 "famportal.category.order": 20
                                                             }
@@ -1715,7 +1715,7 @@
                                             {
                                                 "uri":      "famportal.category-39fc6b55-6fbf-4b13-aeff-365707ce0169-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Junge Eltern",
                                                     "famportal.category.order": 40
                                                 }
@@ -1723,7 +1723,7 @@
                                             {
                                                 "uri":      "famportal.category-e5e3dfce-1678-4b2a-a65d-d3779605edcf-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Senior/innen",
                                                     "famportal.category.order": 50
                                                 }
@@ -1731,14 +1731,14 @@
                                             {
                                                 "uri":      "famportal.category-25c42d0a-eafa-4e46-bc8a-2e96de0d3722-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Verwandte",
                                                     "famportal.category.order": 60,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-14b166df-ca2a-4253-b3a3-19d244442502-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Gro\u00dfeltern",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1749,7 +1749,7 @@
                                             {
                                                 "uri":      "famportal.category-e43c5c03-91d1-4fd7-8929-f244a8c2f911-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Nachbarn",
                                                     "famportal.category.order": 70
                                                 }
@@ -1760,14 +1760,14 @@
                                 {
                                     "uri":      "famportal.category-26d7a534-cd51-49dc-96bc-573b9badb8ec-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Famili\u00e4res Umfeld",
                                         "famportal.category.order": 40,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-08dea41e-9565-45a3-9c2b-79051c6ce342-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Schule",
                                                     "famportal.category.order": 10
                                                 }
@@ -1775,7 +1775,7 @@
                                             {
                                                 "uri":      "famportal.category-b1d2496e-2261-4ba0-91eb-61e1edd84494-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Kitas",
                                                     "famportal.category.order": 20
                                                 }
@@ -1783,7 +1783,7 @@
                                             {
                                                 "uri":      "famportal.category-60e3449d-a6dd-448f-9b2d-7239b716e059-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Vereine",
                                                     "famportal.category.order": 30
                                                 }
@@ -1791,7 +1791,7 @@
                                             {
                                                 "uri":      "famportal.category-8a531c1a-c202-4800-804a-a95b3a611d59-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Glaube/Religion",
                                                     "famportal.category.order": 40
                                                 }
@@ -1799,14 +1799,14 @@
                                             {
                                                 "uri":      "famportal.category-2e20e46a-46d4-4299-90a4-804f078bd73a-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Unternehmen",
                                                     "famportal.category.order": 50,
                                                     "famportal.category": [
                                                         {
                                                             "uri":      "famportal.category-14fed6a8-cec9-4517-b303-bf30a0105694-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Arbeitgeber/innen",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1814,7 +1814,7 @@
                                                         {
                                                             "uri":      "famportal.category-1c16cb5c-fe98-4ec7-a043-c0c10da00615-de_DE-1",
                                                             "type_uri": "famportal.category",
-                                                            "composite": {
+                                                            "childs": {
                                                                 "famportal.category.name": "Arbeitnehmer/innen",
                                                                 "famportal.category.order": 10
                                                             }
@@ -1828,14 +1828,14 @@
                                 {
                                     "uri":      "famportal.category-969dfa75-ba8a-4f97-b98a-dcabe3446f7f-de_DE-1",
                                     "type_uri": "famportal.category",
-                                    "composite": {
+                                    "childs": {
                                         "famportal.category.name": "Engagiert f\u00fcr Familien",
                                         "famportal.category.order": 50,
                                         "famportal.category": [
                                             {
                                                 "uri":      "famportal.category-6d6d5809-0b96-4d55-83c4-6862f12b8f63-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Fachkr\u00e4fte Fr\u00fche Hilfen",
                                                     "famportal.category.order": 10
                                                 }
@@ -1843,7 +1843,7 @@
                                             {
                                                 "uri":      "famportal.category-67ba5a6c-7cf8-403d-82b4-0901ee87c296-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Fachkr\u00e4fte in der Jugendarbeit",
                                                     "famportal.category.order": 20
                                                 }
@@ -1851,7 +1851,7 @@
                                             {
                                                 "uri":      "famportal.category-68abfd5f-a6a8-4727-a1a4-dbfe43e52190-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Elternvertretung",
                                                     "famportal.category.order": 30
                                                 }
@@ -1859,7 +1859,7 @@
                                             {
                                                 "uri":      "famportal.category-7c450914-9aa4-400c-ace6-d8b06b753b29-de_DE-1",
                                                 "type_uri": "famportal.category",
-                                                "composite": {
+                                                "childs": {
                                                     "famportal.category.name": "Ehrenamtliche",
                                                     "famportal.category.order": 40
                                                 }
