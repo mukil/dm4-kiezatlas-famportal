@@ -1,11 +1,12 @@
 package de.kiezatlas.famportal;
 
-import de.kiezatlas.famportal.service.FamilienportalService;
-import de.kiezatlas.service.KiezatlasService;
+import de.kiezatlas.KiezatlasService;
 
-import de.deepamehta.plugins.facets.service.FacetsService;
+import de.deepamehta.plugins.accesscontrol.AccessControlService;
+import de.deepamehta.plugins.workspaces.WorkspacesService;
+import de.deepamehta.plugins.facets.FacetsService;
 import de.deepamehta.plugins.facets.model.FacetValue;
-import de.deepamehta.plugins.geomaps.service.GeomapsService;
+import de.deepamehta.plugins.geomaps.GeomapsService;
 import de.deepamehta.plugins.geomaps.model.GeoCoordinate;
 
 import de.deepamehta.core.RelatedTopic;
@@ -64,6 +65,8 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
     @Inject private KiezatlasService kiezatlasService;
+    @Inject private WorkspacesService workspacesService;
+    @Inject private AccessControlService accessControlService;
     @Inject private GeomapsService geomapsService;
     @Inject private FacetsService facetsService;
 
@@ -212,7 +215,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
      */
     private List<GeoObject> applyProximityFilter(List<RelatedTopic> geoObjects, ProximityFilter proximityFilter) {
         logger.info("Applying proximityfilter to a list of " + geoObjects.size() + " geo-objects");
-        List<GeoObject> results = new ArrayList();
+        List<GeoObject> results = new ArrayList<GeoObject>();
         for (Topic geoObjectTopic : geoObjects) {
             try {
                 GeoCoordinate geoCoord = geoCoordinate(geoObjectTopic);

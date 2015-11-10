@@ -4,6 +4,10 @@ import de.deepamehta.core.ChildTopics;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.model.SimpleValue;
 import de.deepamehta.core.service.Migration;
+import de.deepamehta.core.service.Inject;
+import de.deepamehta.core.service.accesscontrol.SharingMode;
+import de.deepamehta.plugins.accesscontrol.AccessControlService;
+import de.deepamehta.plugins.workspaces.WorkspacesService;
 
 import java.util.Iterator;
 import java.util.List;
@@ -14,7 +18,7 @@ public class Migration6 extends Migration {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
-    private Logger logger = Logger.getLogger(getClass().getName());
+    private Logger log = Logger.getLogger(getClass().getName());
 
     static final String FAMPORTAL_WORKSPACE_NAME = "Familienportal";
     static final String FAMPORTAL_WORKSPACE_URI = "de.kiezatlas.familienportal_ws";
@@ -38,21 +42,26 @@ public class Migration6 extends Migration {
         TopicType categoryNameType = dms.getTopicType("famportal.category.name");
         TopicType categoryFacetType = dms.getTopicType("famportal.category.facet"); **/
         // ### Types miss workspaceAssignments to any workspace
+        Topic categoryRoot = dms.getTopic("uri", new SimpleValue("famportal.root"));
+        workspaceService.assignToWorkspace(categoryRoot, famportalWorkspace.getId());
+        //
         List<Topic> categories = dms.getTopics("uri", new SimpleValue("famportal.category*"));
         Iterator<Topic> i = categories.iterator();
         while (i.hasNext()) {
             Topic topic = i.next();
-            workspaceService.assignToWorkspace(topic, famportal.getId());
+            workspaceService.assignToWorkspace(topic, famportalWorkspace.getId());
             log.info("Assigned famportal category " + topic.getSimpleValue() + " to confidential workspace " +
                     "\"Familienportal\"");
             ChildTopics childs = topic.loadChildTopics().getChildTopics();
-            Topic nameTopic = childs.getTopic("famportal.category.name");
-            Topic orderTopic = childs.getTopic("famportal.category.order");
-            workspaceService.assignToWorkspace(nameTopic, famportal.getId());
-            workspaceService.assignToWorkspace(orderTopic, famportal.getId());
-            log.info("Assigned famportal name & order childs " + topic.getSimpleValue() + " to confidential " +
-                    "workspace " +
-                    "\"Familienportal\"");
+            if (childs.has("famportal.category.name")) {
+                Topic nameTopic = childs.getTopic("famportal.category.name");
+                Topic orderTopic = childs.getTopic("famportal.category.order");
+                workspaceService.assignToWorkspace(nameTopic, famportalWorkspace.getId());
+                workspaceService.assignToWorkspace(orderTopic, famportalWorkspace.getId());
+                log.info("Assigned famportal name & order childs " + topic.getSimpleValue() + " to confidential " +
+                        "workspace " +
+                        "\"Familienportal\"");
+            }
         }
         // ### Fix association (famportal.category to geo-objects) workspace assignments, too.
 
