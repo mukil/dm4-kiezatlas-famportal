@@ -6,21 +6,21 @@
 
     <name>DeepaMehta 4 Kiezatlas - Familienportal</name>
     <groupId>de.kiezatlas</groupId>
-    <artifactId>dm44-kiezatlas-famportal</artifactId>
-    <version>0.6-SNAPSHOT</version>
+    <artifactId>dm47-kiezatlas-famportal</artifactId>
+    <version>0.7-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
     <parent>
         <groupId>de.deepamehta</groupId>
         <artifactId>deepamehta-plugin-parent</artifactId>
-        <version>4.4.3</version>
+        <version>4.7</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>de.kiezatlas</groupId>
-            <artifactId>dm44-kiezatlas</artifactId>
-            <version>2.1.6</version>
+            <artifactId>dm47-kiezatlas</artifactId>
+            <version>2.1.7-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
