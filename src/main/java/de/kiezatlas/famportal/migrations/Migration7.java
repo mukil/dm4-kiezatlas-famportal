@@ -303,7 +303,6 @@ public class Migration7 extends Migration {
                         "category-da6043d2-f172-4879-81a2-3427e586d249-de_DE-1");
                 ChildTopicsModel babyCategoryModel = new ChildTopicsModel();
                 babyCategoryModel.add("famportal.category", babys);
-                // TODO: Use delref to parent so we do not delete it in 8
                 TopicModel babyCategory = new TopicModel(babyCategoryModel);
                 topic.update(babyCategory);
                 // 2) Create "Vorschulkinder cat
@@ -342,14 +341,14 @@ public class Migration7 extends Migration {
                 TopicModel stepParentsCategory = new TopicModel(stepParentsModelCategory);
                 topic.update(stepParentsCategory);
                 // 7) Create "Alleinerziehend"
-                TopicModel alleinerziehend = createFamportalCategoryTopicModel("Alleinerziehend", 100,
+                TopicModel alleinerziehend = createFamportalCategoryTopicModel("Alleinerziehende", 100,
                         "category-7d9766a0-58de-4173-b457-c0b8d027f9bb-de_DE-1");
                 ChildTopicsModel alleinerziehendModelCategory = new ChildTopicsModel();
                 alleinerziehendModelCategory.add("famportal.category", alleinerziehend);
-                TopicModel alleinerziehendCategory = new TopicModel(stepParentsModelCategory);
+                TopicModel alleinerziehendCategory = new TopicModel(alleinerziehendModelCategory);
                 topic.update(alleinerziehendCategory);
                 // 8) Create "Menschen in Not"
-                TopicModel menschenNot = createFamportalCategoryTopicModel("Alleinerziehend", 110,
+                TopicModel menschenNot = createFamportalCategoryTopicModel("Menschen in Not", 110,
                         "category-f0daf9b2-da43-4470-945f-21cb36f86930-de_DE-1");
                 ChildTopicsModel menschenNotModelCategory = new ChildTopicsModel();
                 menschenNotModelCategory.add("famportal.category", menschenNot);
@@ -390,16 +389,6 @@ public class Migration7 extends Migration {
                 menschenSuchtModel.add("famportal.category", menschenSucht);
                 TopicModel menschenSuchtCategory = new TopicModel(menschenSuchtModel);
                 topic.update(menschenSuchtCategory);
-                /** // 14) "Pflegebedürftige"
-                 <category id="category-f0daf9b2-da43-4470-945f-21cb36f86930-de_DE-1">
-                 <title>Menschen in Not</title>
-                 </category>
-                TopicModel pflegebeduerftige = createFamportalCategoryTopicModel("Pflegebed\u00fcrftige", 170,
-                        "category-13c11ad9-0df4-41bf-9f79-5d2fc149d095-de_DE-1");
-                ChildTopicsModel pflegebeduerftigeModel = new ChildTopicsModel();
-                pflegebeduerftigeModel.add("famportal.category", pflegebeduerftige);
-                TopicModel pflegebeduerftigeCategory = new TopicModel(pflegebeduerftigeModel);
-                topic.update(pflegebeduerftigeCategory); **/
                 // 15) "Ehrenamtliche und Freiwillige"
                 TopicModel ehrenamtliche = createFamportalCategoryTopicModel("Ehrenamtliche " +
                         "und Freiwillige", 170, "category-05abd661-880e-4dce-89d7-99900b065e65-de_DE-1");
@@ -415,20 +404,24 @@ public class Migration7 extends Migration {
                 TopicModel unternehmenCategory = new TopicModel(unternehmenModel);
                 topic.update(unternehmenCategory);
                 // 17) "Verbnde, Institutionen, Netzwerke"
-                TopicModel vin = createFamportalCategoryTopicModel("Verb\u00e4nde, Institutionen, Netzwerke", 190,
+                TopicModel vin = createFamportalCategoryTopicModel("Verb\u00e4nde, Institutionen, Netzwerke", 210,
                         "category-7fc0b896-b194-4222-9421-5dd6cc7eb02f-de_DE-1");
                 ChildTopicsModel vinModel = new ChildTopicsModel();
-                unternehmenModel.add("famportal.category", vin);
+                vinModel.add("famportal.category", vin);
                 TopicModel vinCategory = new TopicModel(vinModel);
                 topic.update(vinCategory);
             } else if (topic.getUri().equals("famportal.category-7f4ac210-a92c-4722-ae40-e7a7b8b456d6-de_DE-1")) {
                 // Rename to "Schulkinder"
                 topic.setChildTopics(new ChildTopicsModel().put("famportal.category.name", "Schulkinder"));
+                // Remove reference at "Kinder und Jugendliche"
+                removeParentalReference(topic, "famportal.category-0e103816-0320-4c22-8be9-3af0544299c0-de_DE-1");
                 // Move to "Familie+"
                 assignTopicNewParent(topic, familiePlus);
             } else if (topic.getUri().equals("famportal.category-5dc53f71-20c8-47c4-bab7-1fbeb51d42d4-de_DE-1")) {
                 // Rename to "Jugendliche"
                 topic.setChildTopics(new ChildTopicsModel().put("famportal.category.name", "Jugendliche"));
+                // Remove reference at "Kinder und Jugendliche"
+                removeParentalReference(topic, "famportal.category-0e103816-0320-4c22-8be9-3af0544299c0-de_DE-1");
                 // Move to "FAmilie+"
                 assignTopicNewParent(topic, familiePlus);
             } else if (topic.getUri().equals("famportal.category-3c66fa54-1edb-4378-aa11-000b92f095c8-de_DE-1")) {
@@ -437,11 +430,22 @@ public class Migration7 extends Migration {
             } else if (topic.getUri().equals("famportal.category-854b49b9-e9cb-4b08-a2c3-32abf8acc572-de_DE-1")) {
                 // Rename to "Menschen mit Krankheit"
                 topic.setChildTopics(new ChildTopicsModel().put("famportal.category.name", "Menschen mit Krankheit"));
+                // Remove reference at "Gesundheit"
+                removeParentalReference(topic, "famportal.category-eaf6576d-c2c7-4828-bb0a-4dc0ecd90c83-de_DE-1");
+                // Add reference to "Familie+"
                 assignTopicNewParent(topic, familiePlus);
             } else if (topic.getUri().equals("famportal.category-6ad83bfa-3afd-46f6-b3cd-b82825d8387a-de_DE-1")) {
                 // Rename to "Migranten und Flüchtlinge"
                 topic.setChildTopics(new ChildTopicsModel().put("famportal.category.name", "Migranten und " +
                         "Fl\u00fcchtlinge"));
+                // Remove reference at "Eltern und Erwachsene"
+                removeParentalReference(topic, "famportal.category-3c66fa54-1edb-4378-aa11-000b92f095c8-de_DE-1");
+                // Add new reference to "Familie+"
+                assignTopicNewParent(topic, familiePlus);
+            } else if (topic.getUri().equals("famportal.category-13c11ad9-0df4-41bf-9f79-5d2fc149d095-de_DE-1")) {
+                // Remove reference at "Gesundheit"
+                removeParentalReference(topic, "famportal.category-5560b21e-d319-482d-a92a-0bcfb5447d5e-de_DE-1");
+                // Add new reference to "Familie+"
                 assignTopicNewParent(topic, familiePlus);
             }
 
@@ -463,6 +467,13 @@ public class Migration7 extends Migration {
         parent.update(category);
     }
 
+    private void removeParentalReference(Topic element, String famportalCategoryTopicURI) {
+        Topic parent = dms.getTopic("uri", new SimpleValue(famportalCategoryTopicURI));
+        ChildTopicsModel updateModel = new ChildTopicsModel();
+        updateModel.addDeletionRef("famportal.category", element.getId());
+        TopicModel category = new TopicModel(updateModel);
+        parent.update(category);
+    }
 
     private TopicModel createFamportalCategoryTopicModel(String name, int order, String uriPart) {
         // ..) Create new child topics

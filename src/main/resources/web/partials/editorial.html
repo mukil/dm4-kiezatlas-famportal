@@ -6,16 +6,20 @@
                 {{category.value}}
                 <ul>
                     <li ng-repeat="category in category.childs['famportal.category'] | orderBy:'childs[\'famportal.category.order\'].value'">
-                        <a href="" ng-click="selectFamportalCategory(category)" ng-class="{selected: category.id == famportalCategory.id}">{{category.value}}</a> ({{famportalTree.count["cat-" + category.id]}})
+                        <a href="" ng-click="selectFamportalCategory(category)" title="URI: {{category.uri}}"
+                           ng-class="{selected: category.id == famportalCategory.id}">{{category.value}}</a>({{famportalTree.count["cat-" + category.id]}})
                         <ul>
                             <li ng-repeat="category in category.childs['famportal.category'] | orderBy:'childs[\'famportal.category.order\'].value'">
-                                <a href="" ng-click="selectFamportalCategory(category)" ng-class="{selected: category.id == famportalCategory.id}">{{category.value}}</a> ({{famportalTree.count["cat-" + category.id]}})
+                                <a href="" ng-click="selectFamportalCategory(category)" title="URI: {{category.uri}}"
+                                   ng-class="{selected: category.id == famportalCategory.id}">{{category.value}}</a> ({{famportalTree.count["cat-" + category.id]}})
                                 <ul>
                                     <li ng-repeat="category in category.childs['famportal.category'] | orderBy:'childs[\'famportal.category.order\'].value'">
-                                        <a href="" ng-click="selectFamportalCategory(category)" ng-class="{selected: category.id == famportalCategory.id}">{{category.value}}</a> ({{famportalTree.count["cat-" + category.id]}})
+                                        <a href="" ng-click="selectFamportalCategory(category)"
+                                           title="URI: {{category.uri}}" ng-class="{selected: category.id == famportalCategory.id}">{{category.value}}</a> ({{famportalTree.count["cat-" + category.id]}})
                                         <ul>
                                             <li ng-repeat="category in category.childs['famportal.category'] | orderBy:'childs[\'famportal.category.order\'].value'">
-                                                <a href="" ng-click="selectFamportalCategory(category)" ng-class="{selected: category.id == famportalCategory.id}">{{category.value}}</a> ({{famportalTree.count["cat-" + category.id]}})
+                                                <a href="" ng-click="selectFamportalCategory(category)"
+                                                   title="URI: {{category.uri}}" ng-class="{selected: category.id == famportalCategory.id}">{{category.value}}</a> ({{famportalTree.count["cat-" + category.id]}})
                                             </li>
                                         </ul>
                                     </li>

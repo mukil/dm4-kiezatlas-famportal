@@ -179,20 +179,30 @@ public class Migration8 extends Migration {
         // Including Parent
         kuj.delete();
 
-        // 25) Delete category including all sub-categories from "Großeltern und ältere Menschen"
+        // 25) Delete just all the sub-categories from "Großeltern und ältere Menschen"
         Topic guame = dms.getTopic("uri", new SimpleValue("famportal" +
                 ".category-40c63dee-628a-429f-a039-6282f63da459-de_DE-1"));
         deleteAllSubcategories(guame);
 
-        // 26) Delete category including all sub-categories from "Freunde und Nachbarn"
+        // 26) Delete just all the sub-categories from "Freunde und Nachbarn"
         Topic fun = dms.getTopic("uri", new SimpleValue("famportal" +
                 ".category-a668ba08-74fc-4722-a13e-e90c50755df3-de_DE-1"));
         deleteAllSubcategories(fun);
 
-        // 27) Delete category including all sub-categories from "Fachkräfte für Familien"
+        // 27) Delete just all the sub-categories from "Fachkräfte für Familien"
         Topic fff = dms.getTopic("uri", new SimpleValue("famportal" +
                 ".category-c8bc4e13-1c82-4694-b82b-5702ab66cd76-de_DE-1"));
         deleteAllSubcategories(fff);
+
+        // 28) Delete category including all sub-categories from "Jugendliche"
+        Topic jugendliche = dms.getTopic("uri", new SimpleValue("famportal" +
+                ".category-5dc53f71-20c8-47c4-bab7-1fbeb51d42d4-de_DE-1"));
+        deleteAllSubcategories(jugendliche);
+
+        // 29) Delete category including all sub-categories from "Migranten und Flüchtlinge"
+        Topic muf = dms.getTopic("uri", new SimpleValue("famportal" +
+                ".category-6ad83bfa-3afd-46f6-b3cd-b82825d8387a-de_DE-1"));
+        deleteAllSubcategories(muf);
     }
 
     private void deleteAllSubcategories(Topic guame) {
