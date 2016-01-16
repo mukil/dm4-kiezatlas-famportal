@@ -44,7 +44,7 @@ public class Migration7 extends Migration {
 
             // --- Themen ---
 
-            // Move all bundFuersLeben-Themen subcategories
+            // Move all bundFuersLeben "Themen" subcategories
             if (topic.getUri().equals("famportal.category-68235a12-f151-494c-8e5d-c2dd5492449a-de_DE-1")) { //
                 topic.loadChildTopics();
                 // Move, Ehe, Eheähnliche G., Lebenspartnerschaft, Trennund und Scheidung
@@ -145,8 +145,7 @@ public class Migration7 extends Migration {
                 // ..) Add new composite topic as child topic to our current topic
                 // Topic sucht = dms.createTopic(new TopicModel(childsTopicModel));
                 ChildTopicsModel categoryTopicModel = new ChildTopicsModel();
-                categoryTopicModel.add("famportal.category", suchtModel); // TODO: Do createTopic before add
-                // FIXME: Topic is not created ...
+                categoryTopicModel.add("famportal.category", suchtModel);
                 // ..) Update our current topic with appending our new composite child topic
                 TopicModel category = new TopicModel(categoryTopicModel);
                 topic.update(category);
@@ -162,42 +161,51 @@ public class Migration7 extends Migration {
                 // ..) Update our current topic with appending our new composite child topic
                 TopicModel category = new TopicModel(categoryTopicModel);
                 ausbildungUndBeruf.update(category);
+            } else if (topic.getUri().equals("famportal.category-2d179e10-5e95-409e-8f65-fe492b6422cf-de_DE-1")) {
+                removeParentalReference(topic, "famportal.category-b67338c6-9346-47b1-9fed-36e33a6b698d-de_DE-1");
+                assignTopicNewParent(topic, ausbildungUndBeruf);
             } else if (topic.getUri().equals("famportal.category-8462e4da-0d9c-49a6-838d-6a5fa21669e8-de_DE-1")) {
                 // delete "Kinderbetreuung"
                 log.info("## Deleting Famportal Category Topic " + topic.getSimpleValue());
                 topic.delete();
             } else if (topic.getUri().equals("famportal.category-973782a5-e91f-44af-b313-22f6c736d4c2-de_DE-1")) {
                 // Create new category "Jugendarbeit" to "Freizeit und Kultur"
-                TopicModel jugendArbeitModel = createFamportalCategoryTopicModel("Jugendarbeit", 25,
+                TopicModel jugendArbeitModel = createFamportalCategoryTopicModel("Jugendarbeit", 05,
                         "category-f661d708-4f58-412b-90a1-e7815f0a820b-de_DE-1");
                 ChildTopicsModel categoryTopicModel = new ChildTopicsModel();
                 categoryTopicModel.add("famportal.category", jugendArbeitModel);
                 TopicModel categoryModel = new TopicModel(categoryTopicModel);
                 topic.update(categoryModel);
-                // Create new category "Sucherkrankung" to "Lebenslagen"
-                TopicModel suchterkrankung = createFamportalCategoryTopicModel("Suchtgefh\u00e4rdung und " +
+                // Create new category "Suchterkrankung" to "Lebenslagen"
+                TopicModel suchterkrankung = createFamportalCategoryTopicModel("Suchtgef\u00e4hrdung und " +
                         "Suchterkrankung", 75, "category-36085352-12db-45da-88dd-2afa27216838-de_DE-1");
                 ChildTopicsModel suchtCategoryModel = new ChildTopicsModel();
                 suchtCategoryModel.add("famportal.category", suchterkrankung);
                 TopicModel category = new TopicModel(suchtCategoryModel);
                 lebenslagen.update(category);
-
-            } else if (topic.getUri().equals("famportal.category-f8d0fd7d-48be-4e69-bcff-98da03d82ecf-de_DE-1")) {
-                // Create new category "Neu in der Stadt"
+                // Create new category "Neu in der Stadt" in "Lebenslagen"
                 TopicModel neuInDerStadt = createFamportalCategoryTopicModel("Neu in der Stadt", 105,
-                        "category-36085352-12db-45da-88dd-2afa27216838-de_DE-1");
-                ChildTopicsModel categoryTopicModel = new ChildTopicsModel();
-                categoryTopicModel.add("famportal.category", neuInDerStadt);
-                TopicModel categoryModel = new TopicModel(categoryTopicModel);
-                lebenslagen.update(categoryModel);
+                        "category-f8d0fd7d-48be-4e69-bcff-98da03d82ecf-de_DE-1");
+                ChildTopicsModel neuTopicModel = new ChildTopicsModel();
+                neuTopicModel.add("famportal.category", neuInDerStadt);
+                TopicModel neuModel = new TopicModel(neuTopicModel);
+                lebenslagen.update(neuModel);
+                // Create new category "Todesfall" in "Lebenslagen"
+                TopicModel todesfall = createFamportalCategoryTopicModel("Todesfall", 115,
+                        "category-a7b08000-e727-4bde-bdb3-7b552679bc87-de_DE-1");
+                ChildTopicsModel todesfallModel = new ChildTopicsModel();
+                todesfallModel.add("famportal.category", todesfall);
+                TopicModel todesfallTopicModel = new TopicModel(todesfallModel);
+                lebenslagen.update(todesfallTopicModel);
 
             // --- Lebenslagen ---
 
             } else if (topic.getUri().equals("famportal.category-8c24a931-4844-433e-96f6-673d0def3924-de_DE-1")) {
                 // Rename to "Bund fürs Leben eingehen" .. umbenennen
                 topic.setChildTopics(new ChildTopicsModel().put("famportal.category.name", "Bund f\u00fcrs Leben"));
-                // Bunds fürs Leben verschieben
-                topic.loadChildTopics();
+                // Remove reference to "Familie sein"
+                removeParentalReference(topic, "famportal.category-99bc3d7e-9d0b-43f2-b9ed-960b24c85cef-de_DE-1");
+                // Bunds fürs Leben in "Lenbeslagen" verschieben
                 assignTopicNewParent(topic, lebenslagen);
 
             // Delete "Mutterschaft", "Vaterschaft", "Frühe Elternschaft"," Späte Elternschaft" unterhalb von
@@ -218,6 +226,9 @@ public class Migration7 extends Migration {
             } else if (topic.getUri().equals("famportal.category-11a80e7a-5b29-4d0d-8bfc-8591d5939dec-de_DE-1")) {
                 // Rename and Move Trennung und Scheidung
                 topic.setChildTopics(new ChildTopicsModel().put("famportal.category.name", "Trennung und Scheidung"));
+                // Delete reference to "bund fuers leben"
+                removeParentalReference(topic, "famportal.category-8c24a931-4844-433e-96f6-673d0def3924-de_DE-1");
+                // Add reference to "Lebenslagen"
                 assignTopicNewParent(topic, lebenslagen);
             } else if (topic.getUri().equals("famportal.category-f8b020ee-d31e-4ea8-8fb0-0ce30b0e9236-de_DE-1")) {
                 // Rename to "Arbeitslosigkeit"
@@ -265,7 +276,11 @@ public class Migration7 extends Migration {
                 topic.setChildTopics(new ChildTopicsModel().put("famportal.category.name", "Ruhestand"));
                 // Move to "Lebenslagen"
                 assignTopicNewParent(topic, lebenslagen);
-
+                // Remove reference to "Ruhestand" and add one to "Lebenslagen" instead
+                Topic erbenUndVererben = dms.getTopic("uri", new SimpleValue("famportal" +
+                        ".category-7b0a26aa-9338-4d2c-a50c-99607b0eb059-de_DE-1"));
+                removeParentalReference(erbenUndVererben, topic.getUri());
+                assignTopicNewParent(erbenUndVererben, lebenslagen);
                 // Delete Famportal category (.., .., ,.., ..)
             } else if (topic.getUri().equals("famportal.category-f47872c9-ee93-425c-a1d8-5ccc0eac8e00-de_DE-1") ||
                     topic.getUri().equals("famportal.category-c718ed0d-5f5c-46c7-8c67-55c441027e4f-de_DE-1") ||
@@ -443,8 +458,9 @@ public class Migration7 extends Migration {
                 // Add new reference to "Familie+"
                 assignTopicNewParent(topic, familiePlus);
             } else if (topic.getUri().equals("famportal.category-13c11ad9-0df4-41bf-9f79-5d2fc149d095-de_DE-1")) {
-                // Remove reference at "Gesundheit"
+                // Remove "Pflegebedürftige" reference at "Gesundheit"
                 removeParentalReference(topic, "famportal.category-5560b21e-d319-482d-a92a-0bcfb5447d5e-de_DE-1");
+                topic.setChildTopics(new ChildTopicsModel().put("famportal.category.name", "Pflegebed\u00fcrftige"));
                 // Add new reference to "Familie+"
                 assignTopicNewParent(topic, familiePlus);
             }

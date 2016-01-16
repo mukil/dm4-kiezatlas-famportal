@@ -65,11 +65,13 @@ public class Migration8 extends Migration {
         log.info("### Deleting Famportal Category Topic " + verwandschaft.getSimpleValue());
         verwandschaft.delete();
 
-        // 5) delete "Bund fürs Leben"
+        // 5) delete all sub-categories from "Bund fürs Leben"
         Topic bundFuersLeben = dms.getTopic("uri", new SimpleValue("famportal" +
                 ".category-8c24a931-4844-433e-96f6-673d0def3924-de_DE-1"));
-        log.info("### Deleting Famportal Category Topic " + bundFuersLeben.getSimpleValue());
-        bundFuersLeben.delete();
+        for (Topic child : bundFuersLeben.getChildTopics().getTopics("famportal.category")) {
+            log.info("### Deleting Famportal Category Topic " + child.getSimpleValue());
+            child.delete();
+        }
 
         // 6) Delete "Wohnen"
         Topic wohnen = dms.getTopic("uri", new SimpleValue("famportal.category-2d843bbd-25eb-4c15-b69b-bd85c1765d00-de_DE-1"));
@@ -151,12 +153,6 @@ public class Migration8 extends Migration {
         log.info("### Deleting Famportal Category Topic " + fuerSichUndAndere.getSimpleValue());
         fuerSichUndAndere.delete();
 
-        // 20) Delete "Für sich und andere sorgen"
-        Topic erbenUndVererben = dms.getTopic("uri", new SimpleValue("famportal" +
-                ".category-7b0a26aa-9338-4d2c-a50c-99607b0eb059-de_DE-1"));
-        log.info("### Deleting Famportal Category Topic " + erbenUndVererben.getSimpleValue());
-        erbenUndVererben.delete();
-
         // 21) Delete "Schulformen 2"
         Topic schulFormen = dms.getTopic("uri", new SimpleValue("famportal" +
                 ".category-e0ea1edd-f0ba-4bc3-bb7d-2ff47c69e73d-de_DE-1"));
@@ -203,6 +199,25 @@ public class Migration8 extends Migration {
         Topic muf = dms.getTopic("uri", new SimpleValue("famportal" +
                 ".category-6ad83bfa-3afd-46f6-b3cd-b82825d8387a-de_DE-1"));
         deleteAllSubcategories(muf);
+
+        // 30) Delete famportal category "Spieplätze" aus Familie und Partnscheraft"
+        dms.getTopic("uri", new SimpleValue("famportal.category-2456c50e-4397-46c1-a621-fad3ec91b4fb-de_DE-1")).delete();
+
+        // 31) Delete famportal category "Verlust von Dokumenten"
+        dms.getTopic("uri", new SimpleValue("famportal.category-1ce259dc-ab9a-4447-9bc6-5381b3bc5207-de_DE-1")).delete();
+
+        // 32) Delete famportal category "Kinderschutzfall"
+        dms.getTopic("uri", new SimpleValue("famportal.category-600ea96d-233c-47e3-9b24-e7181ef32f6c-de_DE-1")).delete();
+
+        // 33) Delete famportal category "Gesundheitliche Notlagen"
+        dms.getTopic("uri", new SimpleValue("famportal.category-2b52514a-e807-4bf6-85af-172b7e5e26ff-de_DE-1")).delete();
+
+        // 34) Delete famportal category "Finanzielle Notlagen"
+        dms.getTopic("uri", new SimpleValue("famportal.category-9bdcbd6a-cc86-49c3-a764-e9f2193a6af3-de_DE-1")).delete();
+
+        // 35) Delete famportal category "Rechtliche Notlagen"
+        dms.getTopic("uri", new SimpleValue("famportal.category-e410ab65-442f-4887-ba57-8a984eb62747-de_DE-1")).delete();
+
     }
 
     private void deleteAllSubcategories(Topic guame) {
