@@ -6,6 +6,7 @@ import de.kiezatlas.service.KiezatlasService;
 import de.deepamehta.plugins.facets.service.FacetsService;
 import de.deepamehta.plugins.facets.model.FacetValue;
 import de.deepamehta.plugins.geomaps.service.GeomapsService;
+import de.deepamehta.plugins.workspaces.service.WorkspacesService;
 import de.deepamehta.plugins.geomaps.model.GeoCoordinate;
 
 import de.deepamehta.core.RelatedTopic;
@@ -64,6 +65,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
     @Inject private KiezatlasService kiezatlasService;
+    @Inject private WorkspacesService workspacesService;
     @Inject private GeomapsService geomapsService;
     @Inject private FacetsService facetsService;
 
