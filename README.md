@@ -6,7 +6,16 @@ DeepaMehta 4 Kiezatlas - Familienportal
 Version History
 ---------------
 
-**0.6** -- upcoming
+**0.8** -- UPCOMING
+
+* Compatible with DeepaMehta 4.7
+
+**0.7** -- Jan 17, 2016
+
+* New Familienportal Category Tree
+* Compatible with DeepaMehta 4.4.3
+
+**0.6** -- Nov 11, 2015
 
 * Retrieval API: include "bezirk" information in Kiezatlas objects.
 * Compatible with DeepaMehta 4.4
@@ -60,5 +69,4 @@ Version History
 
 
 ------------
-Jörg Richter  
-Jul 20, 2014
+Jörg Richter, Malte Reißig (2014 - 2016)
