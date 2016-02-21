@@ -69,5 +69,4 @@ Version History
 
 
 ------------
-Jörg Richter  
-Jul 20, 2014
+Jörg Richter, Malte Reißig (2014 - 2016)
