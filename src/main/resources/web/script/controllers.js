@@ -1,20 +1,40 @@
-angular.module("famportal").controller("editorialController", function($scope, $sce, famportalService) {
+angular.module("famportal")
+.controller("editorialController", function($scope, $sce, famportalService) {
 
     $scope.config = {
-        MIN_SEARCH_TERM_LENGTH: 2
+        MIN_SEARCH_TERM_LENGTH: 2,
+        WORKSPACE_COOKIE_NAME: "dm4_workspace_id"
     }
 
+    $scope.authenticated = "" // Username, if logged in
     $scope.searchTerm = ""  // Focusing the search field via tab key triggers a search.
                             // At this time searchTerm must be initialized
 
-    famportalService.getFamportalTree(function(famportalTree) {
-        console.log("Famportal tree", famportalTree)
-        $scope.famportalTree = famportalTree
-        // ### TODO: use q style instead of nested callbacks
-        famportalService.countAssignments(function(geoObjectCount) {
-            console.log("Geo object count", geoObjectCount)
-            $scope.famportalTree.count = geoObjectCount
-        })
+    // 1) Check Authentication
+    famportalService.getUsername(function(username) {
+        $scope.config.authenticated = username
+        if ($scope.config.authenticated !== "") {
+            console.log("Fetching Username", $scope.config.authenticated)
+            // 2) Load Famportal Tree
+            famportalService.getFamportalTree(function(famportalTree) {
+                console.log("Loaded Famportal tree", famportalTree)
+                $scope.famportalTree = famportalTree
+                // ### TODO: use q style instead of nested callbacks
+                famportalService.countAssignments(function(geoObjectCount) {
+                    console.log("Geo object count", geoObjectCount)
+                    $scope.famportalTree.count = geoObjectCount
+                })
+            })
+            // 3) Get Workspace ID
+            famportalService.getWorkspaceId(function(workspaceId) {
+                setCookie($scope.config.WORKSPACE_COOKIE_NAME, workspaceId)
+                console.log("Set Workspace Cookie Value", workspaceId)
+            })
+        } else {
+            // ### Display Login Dialog
+            console.log("Show Authentication Dialog...")
+            // ### Disable Geo Object Search
+        }
     })
 
     $scope.selectFamportalCategory = function(category) {
@@ -64,7 +84,8 @@ angular.module("famportal").controller("editorialController", function($scope, $
 
     $scope.searchGeoObjects = function() {
         var searchTerm = $scope.searchTerm
-        if (searchTerm.length >= $scope.config.MIN_SEARCH_TERM_LENGTH) {
+        if (searchTerm.length >= $scope.config.MIN_SEARCH_TERM_LENGTH
+            && $scope.config.authenticated !== "") {
             famportalService.searchGeoObjects(searchTerm, function(geoObjects) {
                 console.log("Geo objects (by name) with", searchTerm, geoObjects)
                 $scope.geoObjects = geoObjects.items
@@ -182,6 +203,11 @@ angular.module("famportal").controller("editorialController", function($scope, $
             geoObject.childs[childTypeUri].value = $sce.trustAsHtml(geoObject.childs[childTypeUri].value)
         }
     }
+
+    function setCookie(name, value) {
+        document.cookie = name + "=" + value + ";"
+    }
+
 })
 .controller("categoriesController", function($scope, $http) {
     $scope.search = function() {

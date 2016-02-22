@@ -1,8 +1,16 @@
 angular.module("famportal").service("famportalService", function($http) {
 
+    this.getUsername = function(callback) {
+        $http.get("/accesscontrol/user").success(callback)
+    }
+
     this.getFamportalTree = function(callback) {
         var FAMPORTAL_ROOT = "famportal.root"
         $http.get("/core/topic/by_value/uri/" + FAMPORTAL_ROOT + "?include_childs=true").success(callback)
+    }
+
+    this.getWorkspaceId = function(callback) {
+        $http.get("/famportal/workspace").success(callback)
     }
 
     this.getGeoObjectsByCategory = function(famportalCatId, callback) {

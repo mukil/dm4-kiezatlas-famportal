@@ -114,6 +114,12 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     // --- Redaktionswerkzeug ---
 
+    @GET
+    @Path("/workspace")
+    public long getFamportalWorkspaceId() {
+        return dms.getTopic("uri", new SimpleValue("de.kiezatlas.familienportal_ws")).getId();
+    }
+
     @PUT
     @Path("/category/{id}")
     @Override
