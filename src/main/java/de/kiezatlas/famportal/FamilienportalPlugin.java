@@ -199,6 +199,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     private List<RelatedTopic> uniteAllGeoObjects(CategorySet categorySet) {
         List<RelatedTopic> relatedTopics = null;
         for (String categoryXmlId : categorySet) {
+            // TODO: The following should not fail hard due to (sometimes) missing catIds
             long catId = categoryTopic(categoryXmlId).getId();
             List<RelatedTopic> intermediaryList = fetchGeoObjectTopicsInFamportalCategory(catId);
             relatedTopics = getUnion(relatedTopics, intermediaryList);
