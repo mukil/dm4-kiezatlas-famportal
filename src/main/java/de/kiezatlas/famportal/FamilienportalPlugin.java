@@ -30,6 +30,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import org.apache.commons.collections4.ListUtils;
 
 
@@ -70,6 +72,8 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Inject private GeomapsService geomapsService;
     @Inject private FacetsService facetsService;
 
+    Topic famportalWorkspace = null;
+
     private Logger logger = Logger.getLogger(getClass().getName());
 
     // -------------------------------------------------------------------------------------------------- Public Methods
@@ -89,6 +93,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Override
     public List<GeoObject> getGeoObjects(@QueryParam("category") List<CategorySet> categorySets,
                                          @QueryParam("proximity") ProximityFilter proximityFilter) {
+        isAuthorized();
         try {
             if (categorySets.isEmpty()) {
                 throw new RuntimeException("Missing the \"category\" parameter in request");
@@ -100,7 +105,6 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
                 // simply adding up all elements related to all categories (contains duplicates)
                 List<RelatedTopic> categoryList = uniteAllGeoObjects(categorySet);
                 // if there is something to intersect, do so
-                int count = (resultList != null) ? resultList.size() : 0;
                 resultList = getIntersection(resultList, categoryList);
             }
             // make resultlist only contain unique topics
@@ -117,7 +121,9 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @GET
     @Path("/workspace")
     public long getFamportalWorkspaceId() {
-        return dms.getTopic("uri", new SimpleValue("de.kiezatlas.familienportal_ws")).getId();
+        if (famportalWorkspace != null) return famportalWorkspace.getId();
+        famportalWorkspace = dms.getTopic("uri", new SimpleValue("de.kiezatlas.familienportal_ws"));
+        return famportalWorkspace.getId();
     }
 
     @PUT
@@ -126,6 +132,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Transactional
     public void createAssignments(@PathParam("id") long famportalCategoryId,
                                   @QueryParam("geo_object") List<Long> geoObjectIds) {
+        isAuthorized();
         updateFacet(geoObjectIds, createFacetValue(famportalCategoryId));
     }
 
@@ -135,6 +142,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Transactional
     public void createAssignmentsByCategories(@PathParam("id") long famportalCategoryId,
                                               @QueryParam("ka_cat") List<Long> kiezatlasCategoryIds) {
+        isAuthorized();
         updateFacetByCategories(kiezatlasCategoryIds, createFacetValue(famportalCategoryId));
     }
 
@@ -146,6 +154,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Transactional
     public void deleteAssignments(@PathParam("id") long famportalCategoryId,
                                   @QueryParam("geo_object") List<Long> geoObjectIds) {
+        isAuthorized();
         updateFacet(geoObjectIds, createDeletionFacetValue(famportalCategoryId));
     }
 
@@ -155,6 +164,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Transactional
     public void deleteAssignmentsByCategories(@PathParam("id") long famportalCategoryId,
                                               @QueryParam("ka_cat") List<Long> kiezatlasCategoryIds) {
+        isAuthorized();
         updateFacetByCategories(kiezatlasCategoryIds, createDeletionFacetValue(famportalCategoryId));
     }
 
@@ -165,6 +175,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Override
     public GeoObjectCount countAssignments() {
         GeoObjectCount count = new GeoObjectCount();
+        isAuthorized();
         for (Topic famportalCategory : dms.getTopics(FAMPORTAL_CATEGORY_URI, 0).getItems()) {
             long famCatId = famportalCategory.getId();
             count.addCount(famCatId, kiezatlasService.getGeoObjectsByCategory(famCatId).size());
@@ -176,6 +187,12 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     // ------------------------------------------------------------------------------------------------- Private Methods
 
+    private void isAuthorized() throws WebApplicationException {
+        if (famportalWorkspace == null) getFamportalWorkspaceId();
+        if (!accessControlService.isMember(accessControlService.getUsername(), famportalWorkspace.getId())) {
+            throw new WebApplicationException(Response.Status.UNAUTHORIZED);
+        }
+    }
     /**
      * Returns a list containing elements which are contained in both lists.
      */
@@ -199,12 +216,15 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     private List<RelatedTopic> uniteAllGeoObjects(CategorySet categorySet) {
         List<RelatedTopic> relatedTopics = null;
         for (String categoryXmlId : categorySet) {
-            // TODO: The following should not fail hard due to (sometimes) missing catIds
-            long catId = categoryTopic(categoryXmlId).getId();
-            List<RelatedTopic> intermediaryList = fetchGeoObjectTopicsInFamportalCategory(catId);
-            relatedTopics = getUnion(relatedTopics, intermediaryList);
-            logger.info("> Fetched all " + intermediaryList.size() + " Geo Objects in \"" +categoryXmlId+ "\", Union="
-                    + relatedTopics.size() + " Categories=" + categorySet.size() + "");
+            try {
+                long catId = categoryTopic(categoryXmlId).getId();
+                List<RelatedTopic> intermediaryList = fetchGeoObjectTopicsInFamportalCategory(catId);
+                relatedTopics = getUnion(relatedTopics, intermediaryList);
+                logger.info("> Fetched all " + intermediaryList.size() + " Geo Objects in \"" +categoryXmlId+ "\", Union="
+                        + relatedTopics.size() + " Categories=" + categorySet.size() + "");
+            } catch (RuntimeException rex) {
+                logger.warning("> Cushioned Famportal query involving an unknown category " + rex.getMessage());
+            }
         }
         return relatedTopics;
     }
