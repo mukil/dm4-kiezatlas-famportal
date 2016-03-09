@@ -7,7 +7,7 @@
     <name>DeepaMehta 4 Kiezatlas - Familienportal</name>
     <groupId>de.kiezatlas</groupId>
     <artifactId>dm47-kiezatlas-famportal</artifactId>
-    <version>0.8-SNAPSHOT</version>
+    <version>0.8</version>
     <packaging>bundle</packaging>
 
     <parent>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>de.kiezatlas</groupId>
             <artifactId>dm47-kiezatlas</artifactId>
-            <version>2.1.7-SNAPSHOT</version>
+            <version>2.1.7</version>
         </dependency>
         <dependency>
             <groupId>de.deepamehta</groupId>
