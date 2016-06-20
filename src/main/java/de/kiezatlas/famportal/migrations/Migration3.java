@@ -12,7 +12,7 @@ public class Migration3 extends Migration {
 
     @Override
     public void run() {
-        for (Topic topic : dms.getTopics("famportal.category", 0).getItems()) {
+        for (Topic topic : dm4.getTopicsByType("famportal.category")) {
             topic.delete();
         }
     }

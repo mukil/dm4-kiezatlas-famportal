@@ -205,7 +205,8 @@ angular.module("famportal")
     }
 
     function setCookie(name, value) {
-        document.cookie = name + "=" + value + ";"
+        js.remove_cookie(name)
+        js.set_cookie(name, value)
     }
 
 })
