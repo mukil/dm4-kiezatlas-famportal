@@ -1,5 +1,5 @@
 <div>
-    <div>
+    <div ng-if="authenticated">
         <h3>Familienportal Kategorien</h3>
         <ul>
             <li ng-repeat="category in famportalTree.childs['famportal.category'] | orderBy:'childs[\'famportal.category.order\'].value'">
@@ -56,17 +56,24 @@
             </button>
         </div>
     </div>
-    <div ng-if="!famportalCategory">
+    <div ng-if="!famportalCategory && authenticated">
         <h3 style="visibility: hidden;">Zugeordnete Kiezatlas Objekte</h3>
         <br />
         &larr; Wähle eine Kategorie aus
+    </div>
+    <div ng-if="!famportalCategory && !authenticated">
+        <h3>Login ben&ouml;tigt</h3>
+        <p>
+            Bevor Zuordnungen f&uuml;r das Familienportal get&auml;tigt werden k&ouml;nnen m&uuml;ssen sie sich bitte hier 
+            <a href="/sign-up/login">einloggen</a> und danach diese Seite erneut besuchen.
+        </p>
     </div>
 </div>
 
 <div>
     <div>
         <h3>Kiezatlas Objekte suchen</h3>
-        <input type="text" class="searchInputField" ng-model="searchTerm" ng-keyup="searchGeoObjects()">
+        <input type="text" class="searchInputField" ng-model="searchTerm" ng-keyup="searchGeoObjects()" ng-disabled="authenticated === ''">
         <p ng-if="searchResult === null">Gebe mindestens {{config.MIN_SEARCH_TERM_LENGTH}} Buchstaben ein</p>
         <!-- by name -->
         <h4 ng-if="geoObjects != null">Kiezatlas Objekte ({{geoObjects.length}})</h4>

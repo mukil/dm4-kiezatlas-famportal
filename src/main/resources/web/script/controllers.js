@@ -12,9 +12,8 @@ angular.module("famportal")
 
     // 1) Check Authentication
     famportalService.getUsername(function(username) {
-        $scope.config.authenticated = username
-        if ($scope.config.authenticated !== "") {
-            console.log("Fetching Username", $scope.config.authenticated)
+        $scope.authenticated = username
+        if ($scope.authenticated !== "") {
             // 2) Load Famportal Tree
             famportalService.getFamportalTree(function(famportalTree) {
                 console.log("Loaded Famportal tree", famportalTree)
@@ -31,9 +30,7 @@ angular.module("famportal")
                 console.log("Set Workspace Cookie Value", workspaceId)
             })
         } else {
-            // ### Display Login Dialog
-            console.log("Show Authentication Dialog...")
-            // ### Disable Geo Object Search
+            // Link to Sign-up Module Login Dialog is rendered in html
         }
     })
 

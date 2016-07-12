@@ -1,7 +1,7 @@
 angular.module("famportal").service("famportalService", function($http) {
 
     this.getUsername = function(callback) {
-        $http.get("/accesscontrol/user").success(callback)
+        $http.get("/famportal/user").success(callback)
     }
 
     this.getFamportalTree = function(callback) {

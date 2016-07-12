@@ -143,7 +143,12 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         return (facetTopics.size() >= 1);
     } */
 
-
+    @GET
+    @Path("/user")
+    public String getFamportalWorkspaceMember() {
+        isAuthorized();
+        return accessControlService.getUsername();
+    }
 
     // --- Redaktionswerkzeug ---
 
@@ -217,11 +222,14 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     // ------------------------------------------------------------------------------------------------- Private Methods
 
     /**
-     * New as of DeepaMehta 4.7.
-     * It Checks for a "Membership" association between the requesting username and the Famportal workspace. **/
+     * First checks for a valid session and then it checks fo for a "Membership" association between the
+     * requesting username and the Famportal workspace.
+     **/
     private void isAuthorized() throws WebApplicationException {
+        String username = accessControlService.getUsername();
+        if (username == null) throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         if (famportalWorkspace == null) getFamportalWorkspaceId();
-        if (!accessControlService.isMember(accessControlService.getUsername(), famportalWorkspace.getId())) {
+        if (!accessControlService.isMember(username, famportalWorkspace.getId())) {
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
     }
