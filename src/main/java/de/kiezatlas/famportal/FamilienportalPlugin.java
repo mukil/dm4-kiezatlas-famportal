@@ -14,7 +14,7 @@ import de.deepamehta.core.model.facets.FacetValueModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.Transactional;
-import de.kiezatlas.website.WebsiteService;
+// import de.kiezatlas.website.WebsiteService;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -71,7 +71,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Inject private AccessControlService accessControlService;
     @Inject private GeomapsService geomapsService;
     @Inject private FacetsService facetsService;
-    @Inject private WebsiteService websiteService;
+    // @Inject private WebsiteService websiteService;
 
     Topic famportalWorkspace = null;
 
@@ -117,7 +117,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         }
     }
 
-    @GET
+    /* @GET
     @Path("/search")
     public List<GeoObject> searchGeoObjects(@QueryParam("query") String query) {
         isAuthorized();
@@ -141,7 +141,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     private boolean hasRelatedFamportalCategory(Topic geoObject) {
         List<RelatedTopic> facetTopics = facetsService.getFacets(geoObject, FAMPORTAL_CATEGORY_FACET_URI);
         return (facetTopics.size() >= 1);
-    }
+    } */
 
 
 
