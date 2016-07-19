@@ -1,5 +1,6 @@
 package de.kiezatlas.famportal.migrations;
 
+import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.service.Migration;
 import de.deepamehta.core.service.Inject;
@@ -36,7 +37,7 @@ public class Migration9 extends Migration {
     private Topic bezirk(Topic geoObjectTopic) {
         Topic bezirk = facetsService.getFacet(geoObjectTopic, "ka2.bezirk.facet");
         if (bezirk == null) {
-            log.warning("> Reporting that Geo Object " + geoObjectTopic.getSimpleValue() + " MISSES a BEZIRK");
+            log.warning("Reporting that Geo Object \"" + geoObjectTopic + "\" MISSES a BEZIRK");
         }
         return bezirk;
     }

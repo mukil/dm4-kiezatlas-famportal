@@ -167,6 +167,8 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     public void createAssignments(@PathParam("id") long famportalCategoryId,
                                   @QueryParam("geo_object") List<Long> geoObjectIds) {
         isAuthorized();
+        logger.info("Create Famportal (Category ID"+famportalCategoryId+") Assignments by "
+            + "GeoObject IDs " + geoObjectIds.toString());
         updateFacet(geoObjectIds, createFacetValue(famportalCategoryId));
     }
 
@@ -177,6 +179,8 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     public void createAssignmentsByCategories(@PathParam("id") long famportalCategoryId,
                                               @QueryParam("ka_cat") List<Long> kiezatlasCategoryIds) {
         isAuthorized();
+        logger.info("Create Famportal (Category ID"+famportalCategoryId+") Assignments by "
+            + "Category IDs " + kiezatlasCategoryIds.toString());
         updateFacetByCategories(kiezatlasCategoryIds, createFacetValue(famportalCategoryId));
     }
 
@@ -189,6 +193,8 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     public void deleteAssignments(@PathParam("id") long famportalCategoryId,
                                   @QueryParam("geo_object") List<Long> geoObjectIds) {
         isAuthorized();
+        logger.info("Delete Famportal (Category ID"+famportalCategoryId+") Assignments by "
+            + "GeoObject IDs " + geoObjectIds.toString());
         updateFacet(geoObjectIds, createDeletionFacetValue(famportalCategoryId));
     }
 
@@ -199,6 +205,8 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     public void deleteAssignmentsByCategories(@PathParam("id") long famportalCategoryId,
                                               @QueryParam("ka_cat") List<Long> kiezatlasCategoryIds) {
         isAuthorized();
+        logger.info("Delete Famportal (Category ID"+famportalCategoryId+") Assignments by "
+            + "Category IDs " + kiezatlasCategoryIds.toString());
         updateFacetByCategories(kiezatlasCategoryIds, createDeletionFacetValue(famportalCategoryId));
     }
 
