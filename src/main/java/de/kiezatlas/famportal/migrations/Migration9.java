@@ -1,6 +1,5 @@
 package de.kiezatlas.famportal.migrations;
 
-import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
 import de.deepamehta.core.service.Migration;
 import de.deepamehta.core.service.Inject;

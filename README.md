@@ -6,7 +6,13 @@ DeepaMehta 4 Kiezatlas - Familienportal
 Version History
 ---------------
 
-**0.8** -- UPCOMING
+**0.8.1** -- Aug 02, 2016
+
+* Cushioned famportal request if containing an unknown xmlId
+* Adapted to be compatible with DeepaMehta 4.8.2
+* Editorial UI extended about authentication mechanism and cookie handling
+
+**0.8** -- Mar 09, 2016
 
 * Compatible with DeepaMehta 4.7
 
