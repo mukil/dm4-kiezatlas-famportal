@@ -14,6 +14,7 @@ import de.deepamehta.core.model.facets.FacetValueModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.Transactional;
+import de.kiezatlas.website.WebsiteService;
 // import de.kiezatlas.website.WebsiteService;
 
 import javax.ws.rs.GET;
@@ -67,11 +68,11 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
     @Inject private KiezatlasService kiezatlasService;
-    @Inject private WorkspacesService workspacesService;
+    // @Inject private WorkspacesService workspacesService;
     @Inject private AccessControlService accessControlService;
     @Inject private GeomapsService geomapsService;
     @Inject private FacetsService facetsService;
-    // @Inject private WebsiteService websiteService;
+    @Inject private WebsiteService websiteService;
 
     Topic famportalWorkspace = null;
 
@@ -117,12 +118,12 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         }
     }
 
-    /* @GET
+    @GET
     @Path("/search")
     public List<GeoObject> searchGeoObjects(@QueryParam("query") String query) {
         isAuthorized();
         List<GeoObject> results = new ArrayList<GeoObject>();
-        List<Topic> geoObjects = websiteService.searchFulltextInGeoObjectChilds(query);
+        List<Topic> geoObjects = websiteService.searchFulltextInGeoObjectChilds(query, true, false);
         logger.info("Start building response for " + geoObjects.size() + " and FILTER by FAMPORTAL CATEGORY");
         for (Topic geoObject: geoObjects) {
             if (hasRelatedFamportalCategory(geoObject)) {
@@ -141,7 +142,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     private boolean hasRelatedFamportalCategory(Topic geoObject) {
         List<RelatedTopic> facetTopics = facetsService.getFacets(geoObject, FAMPORTAL_CATEGORY_FACET_URI);
         return (facetTopics.size() >= 1);
-    } */
+    }
 
     @GET
     @Path("/user")
