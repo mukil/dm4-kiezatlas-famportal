@@ -15,6 +15,7 @@ public class Migration9 extends Migration {
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
+    private int noBezirksAssignment = 0, noAddressAssignment = 0;
     private Logger log = Logger.getLogger(getClass().getName());
     @Inject private FacetsService facetsService;
 
@@ -22,23 +23,32 @@ public class Migration9 extends Migration {
 
     @Override
     public void run() {
-        log.info("### Migration9 STARTING: Generating a Report on Geo Object with NO BEZIRK assignment");
+        log.info("### Migration Nr.9 STARTING Report: Geo Object with NO BEZIRK or NO ADDRESS assignment");
         List<Topic> geoObjects = dm4.getTopicsByType("ka2.geo_object");
         Iterator<Topic> i = geoObjects.iterator();
         while (i.hasNext()) {
             Topic geoObject = i.next();
             bezirk(geoObject);
+            address(geoObject);
         }
-        log.info("### Migration9 COMPLETE: Generating a Report on Geo Object with NO BEZIRK assignemnt");
-
+        log.info("### Migration Nr.9 Reporting COMPLETE: Geo Objects with NO BEZIRK ("+ noBezirksAssignment + ") "
+            + "or NO ADDRESS ("+noAddressAssignment+")");
     }
 
-    private Topic bezirk(Topic geoObjectTopic) {
+    private void bezirk(Topic geoObjectTopic) {
         Topic bezirk = facetsService.getFacet(geoObjectTopic, "ka2.bezirk.facet");
         if (bezirk == null) {
-            log.warning("Reporting that Geo Object \"" + geoObjectTopic + "\" MISSES a BEZIRK");
+            log.warning("Geo Object \"" + geoObjectTopic + "\" MISSES a BEZIRKs FACET");
+            noBezirksAssignment++;
         }
-        return bezirk;
+    }
+
+    private void address(Topic geoObjectTopic) {
+        Topic address = geoObjectTopic.getChildTopics().getTopicOrNull("dm4.contacts.address");
+        if (address == null) {
+            log.warning("Geo Object \"" + geoObjectTopic + "\" MISSES an ADDRESS TOPIC");
+            noAddressAssignment++;
+        }
     }
 
 }

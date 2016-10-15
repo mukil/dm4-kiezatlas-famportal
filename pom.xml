@@ -13,13 +13,13 @@
     <parent>
         <groupId>de.deepamehta</groupId>
         <artifactId>deepamehta-plugin</artifactId>
-        <version>4.8.2</version>
+        <version>4.8.3</version>
     </parent>
 
-    <!--properties>
-        <dm4.deploy.dir>/home/malted/source/mikro/deepamehta/bundle-deploy</dm4.deploy.dir>
-	<dm4.deploy.dir>/home/malted/Downloads/deepamehta-4.8.2/bundle-deploy</dm4.deploy.dir>
-    </properties-->
+    <properties>
+        <!-- dm4.deploy.dir>/home/malted/source/mikro/deepamehta/bundle-deploy</dm4.deploy.dir-->
+	<!--dm4.deploy.dir>/home/malted/Downloads/deepamehta-4.8.2/bundle-deploy</dm4.deploy.dir-->
+    </properties>
 
     <dependencies>
         <dependency>
@@ -35,12 +35,12 @@
         <dependency>
             <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-workspaces</artifactId>
-            <version>4.8.2</version>
+            <version>4.8.3</version>
         </dependency>
         <dependency>
             <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-facets</artifactId>
-            <version>4.8.2</version>
+            <version>4.8.3</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>

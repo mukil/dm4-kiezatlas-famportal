@@ -295,13 +295,14 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         for (Topic geoObjectTopic : geoObjects) {
             try {
                 GeoCoordinate geoCoord = geoCoordinate(geoObjectTopic);
-                if (proximityFilter != null) {
+                if (proximityFilter != null && geoCoord != null) {
                     double distance = geomapsService.getDistance(geoCoord, proximityFilter.geoCoordinate);
                     if (distance > proximityFilter.radius) {
                         continue;
                     }
                 }
-                results.add(createGeoObject(geoObjectTopic, geoCoord));
+                GeoObject result = createGeoObject(geoObjectTopic, geoCoord);
+                if (result != null) results.add(result);
             } catch (Exception e) {
                 logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
                     geoObjectTopic.getSimpleValue() + "\") from result (" + e + ")");
@@ -323,11 +324,15 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
     private GeoCoordinate geoCoordinate(Topic geoObjectTopic) {
-        Topic address = geoObjectTopic.getChildTopics().getTopic("dm4.contacts.address");
-        GeoCoordinate geoCoord = geomapsService.getGeoCoordinate(address);
-        if (geoCoord == null) {
-            // throw new RuntimeException("Geo coordinate is unknown");
-            logger.fine("No Geo Coordinate assigned to " + geoObjectTopic.getSimpleValue() + " address=" + address.getSimpleValue());
+        Topic address = geoObjectTopic.getChildTopics().getTopicOrNull("dm4.contacts.address");
+        GeoCoordinate geoCoord = null;
+        if (address != null) {
+            geoCoord = geomapsService.getGeoCoordinate(address);
+            if (geoCoord == null) {
+                // throw new RuntimeException("Geo coordinate is unknown");
+                logger.fine("No Geo Coordinate assigned to " + geoObjectTopic.getSimpleValue() + " address=" + address.getSimpleValue());
+            }
+            logger.fine("No Address assigned to " + geoObjectTopic.getSimpleValue());
         }
         return geoCoord;
     }
