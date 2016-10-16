@@ -1,9 +1,6 @@
 package de.kiezatlas.famportal;
 
-import de.kiezatlas.famportal.CategorySet;
-import de.kiezatlas.famportal.GeoObject;
-import de.kiezatlas.famportal.GeoObjectCount;
-import de.kiezatlas.famportal.ProximityFilter;
+import de.deepamehta.core.Topic;
 
 import java.util.List;
 
@@ -11,9 +8,13 @@ import java.util.List;
 
 public interface FamilienportalService {
 
+    public static final String FAMPORTAL_WEBSITE_URI = "de.kiezatlas.site_famportal";
+
     // --- Retrieval API ---
 
     List<GeoObject> getGeoObjects(List<CategorySet> categorySets, ProximityFilter proximity);
+
+    boolean isRelatedToFamportalCategory(Topic geoObject);
 
     // --- Redationalwerkzeug ---
 

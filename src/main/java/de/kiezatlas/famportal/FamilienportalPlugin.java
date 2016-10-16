@@ -68,7 +68,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
     @Inject private KiezatlasService kiezatlasService;
-    // @Inject private WorkspacesService workspacesService;
+    @Inject private WorkspacesService workspacesService;
     @Inject private AccessControlService accessControlService;
     @Inject private GeomapsService geomapsService;
     @Inject private FacetsService facetsService;
@@ -126,10 +126,10 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         List<Topic> geoObjects = websiteService.searchFulltextInGeoObjectChilds(query, true, false);
         logger.info("Start building response for " + geoObjects.size() + " and FILTER by FAMPORTAL CATEGORY");
         for (Topic geoObject: geoObjects) {
-            if (hasRelatedFamportalCategory(geoObject)) {
+            if (isRelatedToFamportalCategory(geoObject)) {
                 GeoCoordinate coordinates = geoCoordinate(geoObject);
                 if (coordinates != null) {
-                    results.add(createGeoObject(geoObject, coordinates));
+                    results.add(createGeoObjectTransferObject(geoObject, coordinates));
                 } else {
                     logger.warning("Skipping valid fulltext search response - MISSES COORDINATES");
                 }
@@ -137,11 +137,6 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         }
         logger.info("Build up response " + results.size() + " geo objects in famportal categories");
         return results;
-    }
-
-    private boolean hasRelatedFamportalCategory(Topic geoObject) {
-        List<RelatedTopic> facetTopics = facetsService.getFacets(geoObject, FAMPORTAL_CATEGORY_FACET_URI);
-        return (facetTopics.size() >= 1);
     }
 
     @GET
@@ -171,6 +166,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         logger.info("Create Famportal (Category ID"+famportalCategoryId+") Assignments by "
             + "GeoObject IDs " + geoObjectIds.toString());
         updateFacet(geoObjectIds, createFacetValue(famportalCategoryId));
+        addToFamportalWebsite(geoObjectIds);
     }
 
     @PUT
@@ -183,6 +179,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         logger.info("Create Famportal (Category ID"+famportalCategoryId+") Assignments by "
             + "Category IDs " + kiezatlasCategoryIds.toString());
         updateFacetByCategories(kiezatlasCategoryIds, createFacetValue(famportalCategoryId));
+        addCategoryToFamportalWebsite(kiezatlasCategoryIds);
     }
 
     // ---
@@ -197,6 +194,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         logger.info("Delete Famportal (Category ID"+famportalCategoryId+") Assignments by "
             + "GeoObject IDs " + geoObjectIds.toString());
         updateFacet(geoObjectIds, createDeletionFacetValue(famportalCategoryId));
+        removeFromFamportalWebsite(geoObjectIds);
     }
 
     @DELETE
@@ -209,6 +207,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         logger.info("Delete Famportal (Category ID"+famportalCategoryId+") Assignments by "
             + "Category IDs " + kiezatlasCategoryIds.toString());
         updateFacetByCategories(kiezatlasCategoryIds, createDeletionFacetValue(famportalCategoryId));
+        removeCategoryFromFamportalWebsite(kiezatlasCategoryIds);
     }
 
     // ---
@@ -227,8 +226,19 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
 
+    @Override
+    public boolean isRelatedToFamportalCategory(Topic geoObject) {
+        List<RelatedTopic> facetTopics = facetsService.getFacets(geoObject, FAMPORTAL_CATEGORY_FACET_URI);
+        return (facetTopics.size() >= 1);
+    }
+
+
 
     // ------------------------------------------------------------------------------------------------- Private Methods
+
+    private Topic getFamportalWebsite() {
+        return dm4.getTopicByUri(FAMPORTAL_WEBSITE_URI);
+    }
 
     /**
      * First checks for a valid session and then it checks fo for a "Membership" association between the
@@ -301,7 +311,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
                         continue;
                     }
                 }
-                GeoObject result = createGeoObject(geoObjectTopic, geoCoord);
+                GeoObject result = createGeoObjectTransferObject(geoObjectTopic, geoCoord);
                 if (result != null) results.add(result);
             } catch (Exception e) {
                 logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
@@ -342,7 +352,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     /**
      * @param   geoCoord    the geo coordinate already looked up.
      */
-    private GeoObject createGeoObject(Topic geoObjectTopic, GeoCoordinate geoCoord) {
+    private GeoObject createGeoObjectTransferObject(Topic geoObjectTopic, GeoCoordinate geoCoord) {
         if (geoCoord == null) return null; // deal breaker
         GeoObject geoObject = new GeoObject();
         Topic bezirk = bezirk(geoObjectTopic);
@@ -408,6 +418,52 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
     // ---
+
+    private void addToFamportalWebsite(List<Long> geoObjectIds) {
+        Topic famportalWebsite = getFamportalWebsite();
+        for (long geoObjectId : geoObjectIds) {
+            Topic geoObject = dm4.getTopic(geoObjectId);
+            kiezatlasService.addGeoObjectToWebsite(geoObject, famportalWebsite);
+        }
+    }
+
+    private void removeFromFamportalWebsite(List<Long> geoObjectIds) {
+        Topic famportalWebsite = getFamportalWebsite();
+        for (long geoObjectId : geoObjectIds) {
+            Topic geoObject = dm4.getTopic(geoObjectId);
+            if (!isRelatedToFamportalCategory(geoObject)) { // checks if there is still another relation
+                kiezatlasService.removeGeoObjectFromWebsite(geoObject, famportalWebsite);
+            } else {
+                // geo object can be in many famportal categories
+                logger.info("SKIPPED removing famportal website assignment for Geo Object \"" + geoObject.getSimpleValue() + "\"");
+            }
+        }
+    }
+
+    private void addCategoryToFamportalWebsite(List<Long> kiezatlasCategoryIds) {
+        Topic famportalWebsite = getFamportalWebsite();
+        for (long catId : kiezatlasCategoryIds) {
+            List<RelatedTopic> geoObjects = kiezatlasService.getGeoObjectsByCategory(catId);
+            for (Topic geoObject : geoObjects) {
+                kiezatlasService.addGeoObjectToWebsite(geoObject, famportalWebsite);
+            }
+        }
+    }
+
+    private void removeCategoryFromFamportalWebsite(List<Long> kiezatlasCategoryIds) {
+        Topic famportalWebsite = getFamportalWebsite();
+        for (long catId : kiezatlasCategoryIds) {
+            List<RelatedTopic> geoObjects = kiezatlasService.getGeoObjectsByCategory(catId);
+            for (Topic geoObject : geoObjects) {
+                if (!isRelatedToFamportalCategory(geoObject)) { // checks if there is still another relation
+                    kiezatlasService.removeGeoObjectFromWebsite(geoObject, famportalWebsite);
+                } else {
+                    // geo object can be in many famportal categories
+                    logger.info("SKIPPED removing famportal website assignment for Geo Object " + geoObject.getSimpleValue());
+                }
+            }
+        }
+    }
 
     private void updateFacet(List<Long> geoObjectIds, FacetValueModel value) {
         for (long geoObjectId : geoObjectIds) {
