@@ -29,11 +29,12 @@ public class Migration10 extends Migration {
     public void run() {
         logger.info("### Migration Nr.10 Create Familienportal Site Topic and assign all famportal Geo Objects to it");
         // 1) Create new Familienportal Site Topic
-        Topic famportalWorkspace = workspacesService.getWorkspace(FAMPORTAL_WORKSPACE_URI);
+        Topic kiezatlasWorkspace = workspacesService.getWorkspace(KiezatlasService.KIEZATLAS_WORKSPACE_URI);
         Topic newKiezatlasSite = kiezService.createKiezatlasWebsite("Familienportal Stadtplan", FamilienportalService.FAMPORTAL_WEBSITE_URI);
-        logger.info("Creating new Kiezatlas Website \"" + newKiezatlasSite.getSimpleValue() + "\"");
-        workspacesService.assignToWorkspace(newKiezatlasSite, famportalWorkspace.getId());
+        logger.info("Creating new Website \"" + newKiezatlasSite.getSimpleValue() + "\", assigned to \"Kiezatlas\" workspace");
+        workspacesService.assignToWorkspace(newKiezatlasSite, kiezatlasWorkspace.getId());
         // 2) Giving all existing geo objects with a familienportal category relation a famportal site assignment
+        Topic famportalWorkspace = workspacesService.getWorkspace(FAMPORTAL_WORKSPACE_URI);
         List<Topic> geoObjects = dm4.getTopicsByType("ka2.geo_object");
         for (Topic geoObject : geoObjects) {
             if (famportalService.isRelatedToFamportalCategory(geoObject)) {
