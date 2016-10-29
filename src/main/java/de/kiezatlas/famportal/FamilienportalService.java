@@ -16,6 +16,8 @@ public interface FamilienportalService {
 
     boolean isRelatedToFamportalCategory(Topic geoObject);
 
+    boolean isRelatedToFamportalCategory(Topic geoObject, long catId);
+
     // --- Redationalwerkzeug ---
 
     void createAssignments(long famportalCategoryId, List<Long> geoObjectIds);

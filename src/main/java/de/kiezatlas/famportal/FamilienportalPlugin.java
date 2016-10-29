@@ -3,6 +3,7 @@ package de.kiezatlas.famportal;
 import de.kiezatlas.KiezatlasService;
 
 import de.deepamehta.accesscontrol.AccessControlService;
+import de.deepamehta.core.Association;
 import de.deepamehta.workspaces.WorkspacesService;
 import de.deepamehta.facets.FacetsService;
 import de.deepamehta.geomaps.GeomapsService;
@@ -101,12 +102,12 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             if (categorySets.isEmpty()) {
                 throw new RuntimeException("Missing the \"category\" parameter in request");
             }
-            List<RelatedTopic> resultList = null;
+            List<Topic> resultList = null;
             Iterator<CategorySet> iteratorSets = categorySets.iterator();
             while (iteratorSets.hasNext()) {
                 CategorySet categorySet = iteratorSets.next();
                 // simply adding up all elements related to all categories (contains duplicates)
-                List<RelatedTopic> categoryList = uniteAllGeoObjects(categorySet);
+                List<RelatedTopic> categoryList = uniteAllGeoObjectTopics(categorySet);
                 // if there is something to intersect, do so
                 resultList = getIntersection(resultList, categoryList);
             }
@@ -121,20 +122,40 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     @GET
     @Path("/search")
-    public List<GeoObject> searchGeoObjects(@QueryParam("query") String query) {
+    public List<GeoObject> searchGeoObjects(@QueryParam("query") String query,
+                                            @QueryParam("category") List<CategorySet> categorySets) {
         isAuthorized();
         List<GeoObject> results = new ArrayList<GeoObject>();
+        // 1) Search in all Geo Objects with given fulltext query
         List<Topic> geoObjects = websiteService.searchFulltextInGeoObjectChilds(query, true, false);
-        logger.info("Start building response for " + geoObjects.size() + " and FILTER by FAMPORTAL CATEGORY");
-        for (Topic geoObject: geoObjects) {
-            if (isRelatedToFamportalCategory(geoObject)) {
-                GeoCoordinate coordinates = geoCoordinate(geoObject);
-                if (coordinates != null) {
-                    results.add(createGeoObjectTransferObject(geoObject, coordinates));
-                } else {
-                    logger.warning("Skipping valid fulltext search response - MISSES COORDINATES");
+        // 2) Fulltext Search WITHOUT any category parameters
+        if (categorySets.isEmpty()) {
+            logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITHOUT famportal category filter");
+            for (Topic geoObject: geoObjects) {
+                if (isRelatedToFamportalCategory(geoObject)) {
+                    GeoCoordinate coordinates = geoCoordinate(geoObject);
+                    if (coordinates != null) {
+                        results.add(createGeoObjectTransferObject(geoObject, coordinates));
+                    } else {
+                        logger.warning("Skipping valid fulltext search response - MISSES COORDINATES");
+                    }
                 }
             }
+        // 3) Fulltext Search WIHT category parameters
+        } else {
+            logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITH famportal category filter");
+            List<Topic> categoryResults = null;
+            Iterator<CategorySet> iteratorSets = categorySets.iterator();
+            while (iteratorSets.hasNext()) {
+                CategorySet categorySet = iteratorSets.next();
+                // 3.1) Filter out geo objects not related to any of the categories in the categorySet
+                List<Topic> categoryList = filterGeoObjectTopics(geoObjects, categorySet);
+                // 3.2) if there is something to intersect, do so
+                categoryResults = getIntersection(categoryResults, categoryList);
+            }
+            logger.info("Famportal Fulltext & Category Search matches " + categoryResults.size());
+            // 3.3) turn categoryResults into a result list of geo objects
+            results = createGeoObjectResultList(categoryResults);
         }
         logger.info("Build up response " + results.size() + " geo objects in famportal categories");
         return results;
@@ -233,7 +254,10 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         return (facetTopics.size() >= 1);
     }
 
-
+    @Override
+    public boolean isRelatedToFamportalCategory(Topic geoObject, long catId) {
+        return (dm4.getAssociation("dm4.core.aggregation", geoObject.getId(), catId, null, null) != null);
+    }
 
     // ------------------------------------------------------------------------------------------------- Private Methods
 
@@ -256,7 +280,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     /**
      * Returns a list containing elements which are contained in both lists.
      */
-    private List<RelatedTopic> getIntersection(List listA, List listB) {
+    private List<Topic> getIntersection(List listA, List listB) {
         if (listA == null) return listB;
         logger.info("> Intersecting " + listA.size() + " Geo Objects AND " + listB.size() + " Geo Objects");
         return ListUtils.intersection(listA, listB);
@@ -273,7 +297,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     /**
      * Returns the union of all related topics for a complete category set.
      */
-    private List<RelatedTopic> uniteAllGeoObjects(CategorySet categorySet) {
+    private List<RelatedTopic> uniteAllGeoObjectTopics(CategorySet categorySet) {
         List<RelatedTopic> relatedTopics = null;
         for (String categoryXmlId : categorySet) {
             try {
@@ -287,6 +311,28 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             }
         }
         return relatedTopics;
+    }
+
+    /**
+     * Returns the union of all related topics for a complete category set.
+     */
+    private List<Topic> filterGeoObjectTopics(List<Topic> topics, CategorySet categorySet) {
+        List<Topic> matchingTopics = new ArrayList<Topic>();
+        Iterator<Topic> iteratorTopics = topics.iterator();
+        while (iteratorTopics.hasNext()) {
+            Topic geoObject = iteratorTopics.next();
+            for (String categoryXmlId : categorySet) {
+                try {
+                    long catId = categoryTopic(categoryXmlId).getId();
+                    if (isRelatedToFamportalCategory(geoObject, catId)) {
+                        matchingTopics.add(geoObject);
+                    }
+                } catch (RuntimeException rex) {
+                    logger.warning("> Cushioned Famportal query involving an unknown category " + rex.getMessage());
+                }
+            }
+        }
+        return matchingTopics;
     }
 
     /**
@@ -312,6 +358,25 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
                         continue;
                     }
                 }
+                GeoObject result = createGeoObjectTransferObject(geoObjectTopic, geoCoord);
+                if (result != null) results.add(result);
+            } catch (Exception e) {
+                logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
+                    geoObjectTopic.getSimpleValue() + "\") from result (" + e + ")");
+            }
+        }
+        return results;
+    }
+
+    /**
+     * Filters the given list about all elements with invalid geo-coordinates.
+     */
+    private List<GeoObject> createGeoObjectResultList(List<Topic> geoObjects) {
+        logger.info("Creating a list of " + geoObjects.size() + " geo objects");
+        List<GeoObject> results = new ArrayList<GeoObject>();
+        for (Topic geoObjectTopic : geoObjects) {
+            try {
+                GeoCoordinate geoCoord = geoCoordinate(geoObjectTopic);
                 GeoObject result = createGeoObjectTransferObject(geoObjectTopic, geoCoord);
                 if (result != null) results.add(result);
             } catch (Exception e) {
@@ -360,7 +425,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         geoObject.setName(geoObjectTopic.getSimpleValue().toString());
         if (bezirk != null) geoObject.setBezirk(bezirk.getSimpleValue().toString()); // formerly deal breaker
         geoObject.setGeoCoordinate(geoCoord);
-        geoObject.setLink(link(geoObjectTopic, bezirk)); // adapt to new responsive resource
+        geoObject.setLink(link(geoObjectTopic, bezirk));
         return geoObject;
     }
 
@@ -378,6 +443,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
     /**
+     * Generates a valid link to a detail resource for a Kiezatlas1 and Kiezatlas2 Geo Object.
      * @param   bezirk      the Bezirk topic already looked up. Not null.
      */
     private String link(Topic geoObjectTopic, Topic bezirk) {
