@@ -61,9 +61,10 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     // The URIs of KA2 Geo Object topics have this prefix.
     // The remaining part of the URI is the original KA1 topic id.
-    private static final String KA2_GEO_OBJECT_URI_PREFIX = "de.kiezatlas.topic.";
+    private static final String KA1_GEO_OBJECT_URI_PREFIX = "de.kiezatlas.topic.";
 
     private static final String KA1_MAP_URL = "http://www.kiezatlas.de/map/%s/p/%s";
+    private static final String KA2_OBJ_URL = "http://api.kiezatlas.de/geoobject/%s";
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
@@ -380,10 +381,18 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
      * @param   bezirk      the Bezirk topic already looked up. Not null.
      */
     private String link(Topic geoObjectTopic, Topic bezirk) {
-        String ka1TopicId, ka1MapAlias;
-        //
-        ka1TopicId = uriPostfix(geoObjectTopic.getUri(), KA2_GEO_OBJECT_URI_PREFIX, "geo object");
-        //
+        String geoObjectId = "";
+        try { // handle as if it were a ka1 object
+            geoObjectId = uriPostfix(geoObjectTopic.getUri(), KA1_GEO_OBJECT_URI_PREFIX, "geo object");
+        } catch (Exception e) { // is ka2 object
+            geoObjectId = "" + geoObjectTopic.getId();
+        }
+        // String mapAlias = ka1MapAlias(geoObjectTopic, bezirk);
+        return String.format(KA2_OBJ_URL, geoObjectId);
+    }
+
+    private String ka1MapAlias(Topic geoObjectTopic, Topic bezirk) {
+        String ka1MapAlias;
         Topic bezirksregion = facetsService.getFacet(geoObjectTopic, "ka2.bezirksregion.facet");
         if (bezirksregion != null) {
             ka1MapAlias = uriPostfix(bezirksregion.getUri(), KA2_BEZIRKSREGION_URI_PREFIX, "Bezirksregion");
@@ -393,7 +402,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         } else {
             ka1MapAlias = ""; // ### each geo object must have a district assignment
         }
-        return String.format(KA1_MAP_URL, ka1MapAlias, ka1TopicId);
+        return ka1MapAlias;
     }
 
     private String uriPostfix(String uri, String uriPrefix, String entityName) {
