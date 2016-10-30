@@ -16,7 +16,7 @@ public interface FamilienportalService {
 
     boolean isRelatedToFamportalCategory(Topic geoObject);
 
-    boolean isRelatedToFamportalCategory(Topic geoObject, long catId);
+    boolean isParentAggregatingTopic(Topic geoObject, long catId);
 
     // --- Redationalwerkzeug ---
 

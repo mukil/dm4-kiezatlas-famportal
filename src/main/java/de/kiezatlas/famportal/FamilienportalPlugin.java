@@ -111,8 +111,11 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
                 // if there is something to intersect, do so
                 resultList = getIntersection(resultList, categoryList);
             }
-            // make resultlist only contain unique topics
-            List<RelatedTopic> uniqueList = new ArrayList(new HashSet(resultList));
+            List<RelatedTopic> uniqueList = null;
+            if (resultList != null) { // is null if NO or WRONG categoryId was requested
+                // make resultlist only contain unique topics
+                uniqueList = new ArrayList(new HashSet(resultList));
+            }
             // apply proximity filter to our resultset and turn them into geo-objects
             return applyProximityFilter(uniqueList, proximityFilter);
         } catch (Exception e) {
@@ -123,7 +126,8 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @GET
     @Path("/search")
     public List<GeoObject> searchGeoObjects(@QueryParam("query") String query,
-                                            @QueryParam("category") List<CategorySet> categorySets) {
+                                            @QueryParam("category") List<CategorySet> categorySets,
+                                            @QueryParam("district") long districtId) {
         isAuthorized();
         List<GeoObject> results = new ArrayList<GeoObject>();
         // 1) Search in all Geo Objects with given fulltext query
@@ -131,11 +135,15 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         // 2) Fulltext Search WITHOUT any category parameters
         if (categorySets.isEmpty()) {
             logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITHOUT famportal category filter");
-            for (Topic geoObject: geoObjects) {
+            for (Topic geoObject : geoObjects) {
                 if (isRelatedToFamportalCategory(geoObject)) {
                     GeoCoordinate coordinates = geoCoordinate(geoObject);
                     if (coordinates != null) {
-                        results.add(createGeoObjectTransferObject(geoObject, coordinates));
+                        if (districtId == 0) {
+                            results.add(createGeoObjectTransferObject(geoObject, coordinates));
+                        } else if (districtId > 0 && isParentAggregatingTopic(geoObject, districtId)) {
+                            results.add(createGeoObjectTransferObject(geoObject, coordinates));
+                        }
                     } else {
                         logger.warning("Skipping valid fulltext search response - MISSES COORDINATES");
                     }
@@ -149,7 +157,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             while (iteratorSets.hasNext()) {
                 CategorySet categorySet = iteratorSets.next();
                 // 3.1) Filter out geo objects not related to any of the categories in the categorySet
-                List<Topic> categoryList = filterGeoObjectTopics(geoObjects, categorySet);
+                List<Topic> categoryList = filterGeoObjectTopics(geoObjects, categorySet, districtId);
                 // 3.2) if there is something to intersect, do so
                 categoryResults = getIntersection(categoryResults, categoryList);
             }
@@ -255,8 +263,9 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
     @Override
-    public boolean isRelatedToFamportalCategory(Topic geoObject, long catId) {
-        return (dm4.getAssociation("dm4.core.aggregation", geoObject.getId(), catId, null, null) != null);
+    public boolean isParentAggregatingTopic(Topic geoObject, long districtOrCategoryId) {
+        return (dm4.getAssociation("dm4.core.aggregation", geoObject.getId(), districtOrCategoryId,
+            "dm4.core.parent", "dm4.core.child") != null);
     }
 
     // ------------------------------------------------------------------------------------------------- Private Methods
@@ -307,7 +316,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
                 logger.info("> Fetched all " + intermediaryList.size() + " Geo Objects in \"" +categoryXmlId+ "\", Union="
                         + relatedTopics.size() + " Categories=" + categorySet.size() + "");
             } catch (RuntimeException rex) {
-                logger.warning("> Cushioned Famportal query involving an unknown category " + rex.getMessage());
+                logger.warning("Cushioned Famportal query involving an unknown category " + rex.getMessage());
             }
         }
         return relatedTopics;
@@ -316,7 +325,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     /**
      * Returns the union of all related topics for a complete category set.
      */
-    private List<Topic> filterGeoObjectTopics(List<Topic> topics, CategorySet categorySet) {
+    private List<Topic> filterGeoObjectTopics(List<Topic> topics, CategorySet categorySet, long districtId) {
         List<Topic> matchingTopics = new ArrayList<Topic>();
         Iterator<Topic> iteratorTopics = topics.iterator();
         while (iteratorTopics.hasNext()) {
@@ -324,11 +333,16 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             for (String categoryXmlId : categorySet) {
                 try {
                     long catId = categoryTopic(categoryXmlId).getId();
-                    if (isRelatedToFamportalCategory(geoObject, catId)) {
-                        matchingTopics.add(geoObject);
+                    if (isParentAggregatingTopic(geoObject, catId)) {
+                        if (districtId == 0) {
+                            logger.info("> No Bezirksfilter set during search request with category filter...");
+                            matchingTopics.add(geoObject);
+                        } else if (districtId > 0 && isParentAggregatingTopic(geoObject, districtId)) {
+                            matchingTopics.add(geoObject);
+                        }
                     }
                 } catch (RuntimeException rex) {
-                    logger.warning("> Cushioned Famportal query involving an unknown category " + rex.getMessage());
+                    logger.warning("Cushioned Famportal query involving an unknown category " + rex.getMessage());
                 }
             }
         }
@@ -347,8 +361,9 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
      * through a higher distance value (or all elements with invalid geo-coordinates).
      */
     private List<GeoObject> applyProximityFilter(List<RelatedTopic> geoObjects, ProximityFilter proximityFilter) {
-        logger.info("Applying proximityfilter to a list of " + geoObjects.size() + " geo-objects");
         List<GeoObject> results = new ArrayList<GeoObject>();
+        if (geoObjects == null) return results;
+        logger.info("Applying proximityfilter to " + geoObjects.size() + " geo-objects");
         for (Topic geoObjectTopic : geoObjects) {
             try {
                 GeoCoordinate geoCoord = geoCoordinate(geoObjectTopic);
