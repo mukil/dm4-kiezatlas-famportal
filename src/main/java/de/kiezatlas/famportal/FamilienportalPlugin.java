@@ -286,6 +286,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
     }
+
     /**
      * Returns a list containing elements which are contained in both lists.
      */
