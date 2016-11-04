@@ -65,7 +65,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     private static final String KA1_GEO_OBJECT_URI_PREFIX = "de.kiezatlas.topic.";
 
     private static final String KA1_MAP_URL = "http://www.kiezatlas.de/map/%s/p/%s";
-    private static final String KA2_OBJ_URL = "http://api.kiezatlas.de/geoobject/%s";
+    private static final String KA2_OBJ_URL = "http://api.kiezatlas.de/website/geo/%s";
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
