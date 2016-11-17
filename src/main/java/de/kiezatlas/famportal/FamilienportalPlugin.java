@@ -3,7 +3,6 @@ package de.kiezatlas.famportal;
 import de.kiezatlas.KiezatlasService;
 
 import de.deepamehta.accesscontrol.AccessControlService;
-import de.deepamehta.core.Association;
 import de.deepamehta.workspaces.WorkspacesService;
 import de.deepamehta.facets.FacetsService;
 import de.deepamehta.geomaps.GeomapsService;
@@ -16,7 +15,6 @@ import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.Transactional;
 import de.kiezatlas.website.WebsiteService;
-// import de.kiezatlas.website.WebsiteService;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -28,6 +26,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -70,13 +69,14 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
     @Inject private KiezatlasService kiezatlasService;
-    @Inject private WorkspacesService workspacesService;
+    @Inject private WorkspacesService workspacesService; // Used in Migrations
     @Inject private AccessControlService accessControlService;
     @Inject private GeomapsService geomapsService;
     @Inject private FacetsService facetsService;
     @Inject private WebsiteService websiteService;
 
     Topic famportalWorkspace = null;
+    HashMap<String, Long> districtUriMap = null;
 
     private Logger logger = Logger.getLogger(getClass().getName());
 
@@ -84,11 +84,23 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
 
 
-    // ************************************
-    // *** FacetsService Implementation ***
-    // ************************************
+    // ****************************************
+    // *** Famportal Service Implementation ***
+    // ****************************************
 
 
+
+    @Override
+    public void init() {
+        // Create new districtUriMap and populate it
+        districtUriMap = new HashMap<String, Long>();
+        List<Topic> topics = dm4.getTopicsByType("ka2.bezirk");
+        for (Topic district : topics) {
+            districtUriMap.put(district.getUri(), district.getId());
+        }
+        logger.info("Initialized map with " + districtUriMap.size()
+                + " Kiezatlas District Topics for Famportal API Queries");
+    }
 
     // --- Retrieval API ---
 
@@ -127,14 +139,17 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Path("/search")
     public List<GeoObject> searchGeoObjects(@QueryParam("query") String query,
                                             @QueryParam("category") List<CategorySet> categorySets,
-                                            @QueryParam("district") long districtId) {
+                                            @QueryParam("district") String districtUri) {
         isAuthorized();
         List<GeoObject> results = new ArrayList<GeoObject>();
+        long districtId = 0;
+        if (districtUri != null && districtUriMap.containsKey(districtUri)) districtId = districtUriMap.get(districtUri);
         // 1) Search in all Geo Objects with given fulltext query
         List<Topic> geoObjects = websiteService.searchFulltextInGeoObjectChilds(query, true, false);
         // 2) Fulltext Search WITHOUT any category parameters
         if (categorySets.isEmpty()) {
-            logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITHOUT famportal category filter");
+            logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITHOUT "
+                    + "category filter, districtUri=" + districtUri);
             for (Topic geoObject : geoObjects) {
                 if (isRelatedToFamportalCategory(geoObject)) {
                     GeoCoordinate coordinates = geoCoordinate(geoObject);
@@ -151,7 +166,8 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             }
         // 3) Fulltext Search WIHT category parameters
         } else {
-            logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITH famportal category filter");
+            logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITH "
+                    + "category filter, districtUri=" + districtUri);
             List<Topic> categoryResults = null;
             Iterator<CategorySet> iteratorSets = categorySets.iterator();
             while (iteratorSets.hasNext()) {
