@@ -146,28 +146,15 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         if (districtUri != null && districtUriMap.containsKey(districtUri)) districtId = districtUriMap.get(districtUri);
         // 1) Search in all Geo Objects with given fulltext query
         List<Topic> geoObjects = websiteService.searchFulltextInGeoObjectChilds(query, true, false);
-        // 2) Fulltext Search WITHOUT any category parameters
+        // 2) Filter Fulltext Search WITHOUT any category but possibley WITH a district parameter
         if (categorySets.isEmpty()) {
             logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITHOUT "
-                    + "category filter, districtUri=" + districtUri);
-            for (Topic geoObject : geoObjects) {
-                if (isRelatedToFamportalCategory(geoObject)) {
-                    GeoCoordinate coordinates = geoCoordinate(geoObject);
-                    if (coordinates != null) {
-                        if (districtId == 0) {
-                            results.add(createGeoObjectTransferObject(geoObject, coordinates));
-                        } else if (districtId > 0 && isParentAggregatingTopic(geoObject, districtId)) {
-                            results.add(createGeoObjectTransferObject(geoObject, coordinates));
-                        }
-                    } else {
-                        logger.warning("Skipping valid fulltext search response - MISSES COORDINATES");
-                    }
-                }
-            }
-        // 3) Fulltext Search WIHT category parameters
+                    + "category filter, district=" + districtId);
+            results = filterFamportalGeoObjects(geoObjects, districtId);
+        // 3) Filter Fulltext Search Results WITH category and/or district parameters
         } else {
             logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITH "
-                    + "category filter, districtUri=" + districtUri);
+                    + "category filter, district=" + districtId);
             List<Topic> categoryResults = null;
             Iterator<CategorySet> iteratorSets = categorySets.iterator();
             while (iteratorSets.hasNext()) {
@@ -177,11 +164,10 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
                 // 3.2) if there is something to intersect, do so
                 categoryResults = getIntersection(categoryResults, categoryList);
             }
-            logger.info("Famportal Fulltext & Category Search matches " + categoryResults.size());
             // 3.3) turn categoryResults into a result list of geo objects
             results = createGeoObjectResultList(categoryResults);
         }
-        logger.info("Build up response " + results.size() + " geo objects in famportal categories");
+        logger.info("Orte API Search Result delivers " + results.size() + " Kiezatlas Orte");
         return results;
     }
 
@@ -351,12 +337,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
                 try {
                     long catId = categoryTopic(categoryXmlId).getId();
                     if (isParentAggregatingTopic(geoObject, catId)) {
-                        if (districtId == 0) {
-                            logger.info("> No Bezirksfilter set during search request with category filter...");
-                            matchingTopics.add(geoObject);
-                        } else if (districtId > 0 && isParentAggregatingTopic(geoObject, districtId)) {
-                            matchingTopics.add(geoObject);
-                        }
+                        addWithDistrictParameter(matchingTopics, geoObject, districtId);
                     }
                 } catch (RuntimeException rex) {
                     logger.warning("Cushioned Famportal query involving an unknown category " + rex.getMessage());
@@ -364,6 +345,23 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             }
         }
         return matchingTopics;
+    }
+
+    private void addWithDistrictParameter(List<Topic> results, Topic geoObject, long districtId) {
+         if (districtId == 0) {
+            results.add(geoObject);
+        } else if (districtId > 0 && isParentAggregatingTopic(geoObject, districtId)) {
+            results.add(geoObject);
+        }
+    }
+
+    private void addGeoObjectWithDistrictParameter(List<GeoObject> results, Topic geoObject, long districtId,
+                                                   GeoCoordinate coordinates) {
+        if (districtId == 0) {
+            results.add(createGeoObjectTransferObject(geoObject, coordinates));
+        } else if (districtId > 0 && isParentAggregatingTopic(geoObject, districtId)) {
+            results.add(createGeoObjectTransferObject(geoObject, coordinates));
+        }
     }
 
     /**
@@ -404,7 +402,6 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
      * Filters the given list about all elements with invalid geo-coordinates.
      */
     private List<GeoObject> createGeoObjectResultList(List<Topic> geoObjects) {
-        logger.info("Creating a list of " + geoObjects.size() + " geo objects");
         List<GeoObject> results = new ArrayList<GeoObject>();
         for (Topic geoObjectTopic : geoObjects) {
             try {
@@ -414,6 +411,21 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             } catch (Exception e) {
                 logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
                     geoObjectTopic.getSimpleValue() + "\") from result (" + e + ")");
+            }
+        }
+        return results;
+    }
+
+    private List<GeoObject> filterFamportalGeoObjects(List<Topic> geoObjects, long districtId) {
+        List<GeoObject> results = new ArrayList<GeoObject>();
+        for (Topic geoObject : geoObjects) {
+            if (isRelatedToFamportalCategory(geoObject)) {
+                GeoCoordinate coordinates = geoCoordinate(geoObject);
+                if (coordinates != null) {
+                    addGeoObjectWithDistrictParameter(results, geoObject, districtId, coordinates);
+                } else {
+                    logger.warning("Skipping valid fulltext search response - MISSES COORDINATES");
+                }
             }
         }
         return results;
