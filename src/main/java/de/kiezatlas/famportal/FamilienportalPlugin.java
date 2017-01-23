@@ -188,6 +188,9 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             if (topics.isEmpty()) {
                 throw new RuntimeException("Missing the \"category\" parameter in request");
             }
+            if (topics.size() > 15) {
+                throw new RuntimeException("Too much information requested - Limit is set to 15 objects max.");
+            }
             Iterator<String> iteratorSets = topics.iterator();
             while (iteratorSets.hasNext()) {
                 String nextId = iteratorSets.next();
@@ -211,9 +214,12 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createGeoObjectComment(@PathParam("geoObjectId") String geoObjectId, CommentModel comment) {
+        // Note: isAuthorized by comments module
         Topic geoObject = websites.getGeoObjectById(geoObjectId);
         if (geoObject == null) {
             return Response.status(404).build();
+        } else if (comment.message.isEmpty()) {
+            return Response.status(500).build();
         } else if (geoObject.getTypeUri().equals(KiezatlasService.GEO_OBJECT)) {
             logger.info("Comment: Received message from \""+comment.contact+"\" on topic \"" + geoObject.getSimpleValue() + "\"");
             Topic topic = comments.createComment(geoObject.getId(), comment.message, comment.contact);
@@ -222,7 +228,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             }
             return Response.noContent().build();
         } else {
-            logger.severe("Preventing commenting on a topic not of type GeoObject!");
+            logger.severe("Prevented a comment targeted to a non geo topic by user \"" + acService.getUsername() + "\"");
             return Response.status(401).build();
         }
     }
