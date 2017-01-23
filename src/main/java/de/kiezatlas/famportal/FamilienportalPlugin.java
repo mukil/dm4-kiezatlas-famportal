@@ -10,14 +10,17 @@ import de.deepamehta.geomaps.model.GeoCoordinate;
 
 import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
+import de.deepamehta.core.model.TopicModel;
 import de.deepamehta.core.model.facets.FacetValueModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.Transactional;
+import de.kiezatlas.comments.CommentsService;
 import de.kiezatlas.website.WebsiteService;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -32,6 +35,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.collections4.ListUtils;
 
@@ -68,12 +72,13 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     // ---------------------------------------------------------------------------------------------- Instance Variables
 
-    @Inject private KiezatlasService kiezatlasService;
-    @Inject private WorkspacesService workspacesService; // Used in Migrations
-    @Inject private AccessControlService accessControlService;
-    @Inject private GeomapsService geomapsService;
-    @Inject private FacetsService facetsService;
-    @Inject private WebsiteService websiteService;
+    @Inject private KiezatlasService kiezatlas;
+    @Inject private WorkspacesService workspaces; // Used in Migrations
+    @Inject private AccessControlService acService;
+    @Inject private GeomapsService geomaps;
+    @Inject private FacetsService facets;
+    @Inject private WebsiteService websites;
+    @Inject private CommentsService comments;
 
     Topic famportalWorkspace = null;
     HashMap<String, Long> districtUriMap = null;
@@ -103,33 +108,6 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
     // --- Retrieval API ---
-
-    @GET
-    @Path("/geoobject")
-    @Override
-    public List<GeoObject> getGeoObjects(@QueryParam("ids") List<String> topics) {
-        isAuthorized();
-        List<Topic> geoObjectTopics = null;
-        try {
-            if (topics.isEmpty()) {
-                throw new RuntimeException("Missing the \"category\" parameter in request");
-            }
-            Iterator<String> iteratorSets = topics.iterator();
-            while (iteratorSets.hasNext()) {
-                String nextId = iteratorSets.next();
-                Topic geoObject = websiteService.getGeoObjectById(nextId);
-                if (geoObject != null) {
-                    geoObjectTopics.add(geoObject);
-                } else {
-                    logger.warning("Could not find geo object for ID=" + nextId);
-                }
-            }
-        } catch(RuntimeException e) {
-            throw new RuntimeException("Fetching geo objects failed (topics=" + topics + ")", e);
-        }
-        logger.info("Orte API delivers " + geoObjectTopics.size() + " Kiezatlas Orte");
-        return createGeoObjectResultList(geoObjectTopics);
-    }
 
     @GET
     @Path("/geoobject")
@@ -173,7 +151,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         long districtId = 0;
         if (districtUri != null && districtUriMap.containsKey(districtUri)) districtId = districtUriMap.get(districtUri);
         // 1) Search in all Geo Objects with given fulltext query
-        List<Topic> geoObjects = websiteService.searchFulltextInGeoObjectChilds(query, false, true, false);
+        List<Topic> geoObjects = websites.searchFulltextInGeoObjectChilds(query, false, true, false);
         // 2) Filter Fulltext Search WITHOUT any category but possibley WITH a district parameter
         if (categorySets.isEmpty()) {
             logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITHOUT "
@@ -200,10 +178,55 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
     @GET
+    @Path("/geoobject/detail")
+    @Override
+    public List<GeoObject> getGeoObjects(@QueryParam("ids") List<String> topics) {
+        isAuthorized();
+        List<Topic> geoObjectTopics = null;
+        try {
+            if (topics.isEmpty()) {
+                throw new RuntimeException("Missing the \"category\" parameter in request");
+            }
+            Iterator<String> iteratorSets = topics.iterator();
+            while (iteratorSets.hasNext()) {
+                String nextId = iteratorSets.next();
+                Topic geoObject = websites.getGeoObjectById(nextId);
+                if (geoObject != null) {
+                    geoObjectTopics.add(geoObject);
+                } else {
+                    logger.warning("Could not find geo object for ID=" + nextId);
+                }
+            }
+        } catch(RuntimeException e) {
+            throw new RuntimeException("Fetching geo objects failed (topics=" + topics + ")", e);
+        }
+        logger.info("Orte API delivers " + geoObjectTopics.size() + " Kiezatlas Orte");
+        return createGeoObjectResultList(geoObjectTopics);
+    }
+
+    @POST
+    @Path("/comment/{geoObjectId}")
+    @Transactional
+    public Response createGeoObjectComment(@PathParam("geoObjectId") long geoObjectId, TopicModel comment) {
+        Topic geoObject = dm4.getTopic(geoObjectId);
+        if (geoObject.getTypeUri().equals(KiezatlasService.GEO_OBJECT)) {
+            logger.info("Creating comment \""+comment.toString()+"\" on topic " + geoObject.getSimpleValue());
+            String message = comment.getChildTopicsModel().getString("ka2.comment.message");
+            String contact = comment.getChildTopicsModel().getString("ka2.comment.contact");
+            comments.createComment(geoObjectId, message, contact);
+            logger.info("OK! Comment created and moved into comments workspace");
+            return Response.noContent().build();
+        } else {
+            logger.warning("Preventing a comment on a topic (not of type GeoObject) unsupported via this API");
+            return Response.status(401).build();
+        }
+    }
+
+    @GET
     @Path("/user")
     public String getFamportalWorkspaceMember() {
         isAuthorized();
-        return accessControlService.getUsername();
+        return acService.getUsername();
     }
 
     // --- Redaktionswerkzeug ---
@@ -280,7 +303,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         isAuthorized();
         for (Topic famportalCategory : dm4.getTopicsByType(FAMPORTAL_CATEGORY_URI)) {
             long famCatId = famportalCategory.getId();
-            count.addCount(famCatId, kiezatlasService.getGeoObjectsByCategory(famCatId).size());
+            count.addCount(famCatId, kiezatlas.getGeoObjectsByCategory(famCatId).size());
         }
         return count;
     }
@@ -288,7 +311,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     @Override
     public boolean isRelatedToFamportalCategory(Topic geoObject) {
-        List<RelatedTopic> facetTopics = facetsService.getFacets(geoObject, FAMPORTAL_CATEGORY_FACET_URI);
+        List<RelatedTopic> facetTopics = facets.getFacets(geoObject, FAMPORTAL_CATEGORY_FACET_URI);
         return (facetTopics.size() >= 1);
     }
 
@@ -309,10 +332,10 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
      * requesting username and the Famportal workspace.
      **/
     private void isAuthorized() throws WebApplicationException {
-        String username = accessControlService.getUsername();
+        String username = acService.getUsername();
         if (username == null) throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         if (famportalWorkspace == null) getFamportalWorkspaceId();
-        if (!accessControlService.isMember(username, famportalWorkspace.getId())) {
+        if (!acService.isMember(username, famportalWorkspace.getId())) {
             throw new WebApplicationException(Response.Status.UNAUTHORIZED);
         }
     }
@@ -396,7 +419,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
      * Returns the list of RelatedTopics to the given Familienportal Category topic id.
      */
     private List<RelatedTopic> fetchGeoObjectTopicsInFamportalCategory(long catId) {
-        return kiezatlasService.getGeoObjectsByCategory(catId);
+        return kiezatlas.getGeoObjectsByCategory(catId);
     }
 
     /**
@@ -411,7 +434,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             try {
                 GeoCoordinate geoCoord = geoCoordinate(geoObjectTopic);
                 if (proximityFilter != null && geoCoord != null) {
-                    double distance = geomapsService.getDistance(geoCoord, proximityFilter.geoCoordinate);
+                    double distance = geomaps.getDistance(geoCoord, proximityFilter.geoCoordinate);
                     if (distance > proximityFilter.radius) {
                         continue;
                     }
@@ -475,7 +498,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         Topic address = geoObjectTopic.getChildTopics().getTopicOrNull("dm4.contacts.address");
         GeoCoordinate geoCoord = null;
         if (address != null) {
-            geoCoord = geomapsService.getGeoCoordinate(address);
+            geoCoord = geomaps.getGeoCoordinate(address);
             if (geoCoord == null) {
                 // throw new RuntimeException("Geo coordinate is unknown");
                 logger.fine("No Geo Coordinate assigned to " + geoObjectTopic.getSimpleValue() + " address=" + address.getSimpleValue());
@@ -506,7 +529,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
      * If no Bezirk topic is assigned an exception is thrown.
      */
     private Topic bezirk(Topic geoObjectTopic) {
-        Topic bezirk = facetsService.getFacet(geoObjectTopic, "ka2.bezirk.facet");
+        Topic bezirk = facets.getFacet(geoObjectTopic, "ka2.bezirk.facet");
         if (bezirk == null) {
             // ### throw new RuntimeException("No Bezirk is assigned"); // May happen with fulltext search
             logger.warning("Skipping Geo Object " + geoObjectTopic.getSimpleValue() + " MISSES BEZIRK");
@@ -531,7 +554,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     private String ka1MapAlias(Topic geoObjectTopic, Topic bezirk) {
         String ka1MapAlias;
-        Topic bezirksregion = facetsService.getFacet(geoObjectTopic, "ka2.bezirksregion.facet");
+        Topic bezirksregion = facets.getFacet(geoObjectTopic, "ka2.bezirksregion.facet");
         if (bezirksregion != null) {
             ka1MapAlias = uriPostfix(bezirksregion.getUri(), KA2_BEZIRKSREGION_URI_PREFIX, "Bezirksregion");
         } else if (bezirk != null) {
@@ -570,7 +593,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         Topic famportalWebsite = getFamportalWebsite();
         for (long geoObjectId : geoObjectIds) {
             Topic geoObject = dm4.getTopic(geoObjectId);
-            kiezatlasService.addGeoObjectToWebsite(geoObject, famportalWebsite);
+            kiezatlas.addGeoObjectToWebsite(geoObject, famportalWebsite);
         }
     }
 
@@ -579,7 +602,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         for (long geoObjectId : geoObjectIds) {
             Topic geoObject = dm4.getTopic(geoObjectId);
             if (!isRelatedToFamportalCategory(geoObject)) { // checks if there is still another relation
-                kiezatlasService.removeGeoObjectFromWebsite(geoObject, famportalWebsite);
+                kiezatlas.removeGeoObjectFromWebsite(geoObject, famportalWebsite);
             } else {
                 // geo object can be in many famportal categories
                 logger.info("SKIPPED removing famportal website assignment for Geo Object \"" + geoObject.getSimpleValue() + "\"");
@@ -590,9 +613,9 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     private void addCategoryToFamportalWebsite(List<Long> kiezatlasCategoryIds) {
         Topic famportalWebsite = getFamportalWebsite();
         for (long catId : kiezatlasCategoryIds) {
-            List<RelatedTopic> geoObjects = kiezatlasService.getGeoObjectsByCategory(catId);
+            List<RelatedTopic> geoObjects = kiezatlas.getGeoObjectsByCategory(catId);
             for (Topic geoObject : geoObjects) {
-                kiezatlasService.addGeoObjectToWebsite(geoObject, famportalWebsite);
+                kiezatlas.addGeoObjectToWebsite(geoObject, famportalWebsite);
             }
         }
     }
@@ -600,10 +623,10 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     private void removeCategoryFromFamportalWebsite(List<Long> kiezatlasCategoryIds) {
         Topic famportalWebsite = getFamportalWebsite();
         for (long catId : kiezatlasCategoryIds) {
-            List<RelatedTopic> geoObjects = kiezatlasService.getGeoObjectsByCategory(catId);
+            List<RelatedTopic> geoObjects = kiezatlas.getGeoObjectsByCategory(catId);
             for (Topic geoObject : geoObjects) {
                 if (!isRelatedToFamportalCategory(geoObject)) { // checks if there is still another relation
-                    kiezatlasService.removeGeoObjectFromWebsite(geoObject, famportalWebsite);
+                    kiezatlas.removeGeoObjectFromWebsite(geoObject, famportalWebsite);
                 } else {
                     // geo object can be in many famportal categories
                     logger.info("SKIPPED removing famportal website assignment for Geo Object " + geoObject.getSimpleValue());
@@ -614,15 +637,15 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     private void updateFacet(List<Long> geoObjectIds, FacetValueModel value) {
         for (long geoObjectId : geoObjectIds) {
-            facetsService.updateFacet(geoObjectId, FAMPORTAL_CATEGORY_FACET_URI, value);
+            facets.updateFacet(geoObjectId, FAMPORTAL_CATEGORY_FACET_URI, value);
         }
     }
 
     private void updateFacetByCategories(List<Long> kiezatlasCategoryIds, FacetValueModel value) {
         for (long catId : kiezatlasCategoryIds) {
-            List<RelatedTopic> geoObjects = kiezatlasService.getGeoObjectsByCategory(catId);
+            List<RelatedTopic> geoObjects = kiezatlas.getGeoObjectsByCategory(catId);
             for (Topic geoObject : geoObjects) {
-                facetsService.updateFacet(geoObject, FAMPORTAL_CATEGORY_FACET_URI, value);
+                facets.updateFacet(geoObject, FAMPORTAL_CATEGORY_FACET_URI, value);
             }
         }
     }
