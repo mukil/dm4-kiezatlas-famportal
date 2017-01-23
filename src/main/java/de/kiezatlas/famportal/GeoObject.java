@@ -33,6 +33,14 @@ public class GeoObject implements JSONEnabled {
         }
     }
 
+    void setAnschrift(String address) {
+        try {
+            json.put("anschrift", address);
+        } catch (Exception e) {
+            throw new RuntimeException("Constructing a GeoObject failed", e);
+        }
+    }
+
     void setBezirk(String bezirk) {
         try {
             json.put("bezirk", bezirk);
@@ -60,4 +68,13 @@ public class GeoObject implements JSONEnabled {
             throw new RuntimeException("Constructing a GeoObject failed", e);
         }
     }
+
+    void setId(String id) {
+        try {
+            json.put("id", id);
+        } catch (Exception e) {
+            throw new RuntimeException("Constructing a GeoObject failed", e);
+        }
+    }
+
 }

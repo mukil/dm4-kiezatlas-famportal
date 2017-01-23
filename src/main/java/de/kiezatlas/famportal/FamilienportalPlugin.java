@@ -384,11 +384,11 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
     private void addGeoObjectWithDistrictParameter(List<GeoObject> results, Topic geoObject, long districtId,
-                                                   GeoCoordinate coordinates) {
+                                                   Topic address, GeoCoordinate coordinates) {
         if (districtId == 0) {
-            results.add(createGeoObjectTransferObject(geoObject, coordinates));
+            results.add(createGeoObjectTransferObject(geoObject, coordinates, address));
         } else if (districtId > 0 && isParentAggregatingTopic(geoObject, districtId)) {
-            results.add(createGeoObjectTransferObject(geoObject, coordinates));
+            results.add(createGeoObjectTransferObject(geoObject, coordinates, address));
         }
     }
 
@@ -409,14 +409,15 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         logger.info("Applying proximityfilter to " + geoObjects.size() + " geo-objects");
         for (Topic geoObjectTopic : geoObjects) {
             try {
-                GeoCoordinate geoCoord = geoCoordinate(geoObjectTopic);
+                Topic address = getAnschrift(geoObjectTopic);
+                GeoCoordinate geoCoord = geoCoordinate(address);
                 if (proximityFilter != null && geoCoord != null) {
                     double distance = geomapsService.getDistance(geoCoord, proximityFilter.geoCoordinate);
                     if (distance > proximityFilter.radius) {
                         continue;
                     }
                 }
-                GeoObject result = createGeoObjectTransferObject(geoObjectTopic, geoCoord);
+                GeoObject result = createGeoObjectTransferObject(geoObjectTopic, geoCoord, address);
                 if (result != null) results.add(result);
             } catch (Exception e) {
                 logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
@@ -433,8 +434,9 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         List<GeoObject> results = new ArrayList<GeoObject>();
         for (Topic geoObjectTopic : geoObjects) {
             try {
-                GeoCoordinate geoCoord = geoCoordinate(geoObjectTopic);
-                GeoObject result = createGeoObjectTransferObject(geoObjectTopic, geoCoord);
+                Topic address = getAnschrift(geoObjectTopic);
+                GeoCoordinate geoCoord = geoCoordinate(address);
+                GeoObject result = createGeoObjectTransferObject(geoObjectTopic, geoCoord, address);
                 if (result != null) results.add(result);
             } catch (Exception e) {
                 logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
@@ -448,9 +450,10 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         List<GeoObject> results = new ArrayList<GeoObject>();
         for (Topic geoObject : geoObjects) {
             if (isRelatedToFamportalCategory(geoObject)) {
-                GeoCoordinate coordinates = geoCoordinate(geoObject);
+                Topic address = getAnschrift(geoObject);
+                GeoCoordinate coordinates = geoCoordinate(address);
                 if (coordinates != null) {
-                    addGeoObjectWithDistrictParameter(results, geoObject, districtId, coordinates);
+                    addGeoObjectWithDistrictParameter(results, geoObject, districtId, address, coordinates);
                 } else {
                     logger.warning("Skipping valid fulltext search response - MISSES COORDINATES");
                 }
@@ -471,16 +474,29 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         return cat;
     }
 
-    private GeoCoordinate geoCoordinate(Topic geoObjectTopic) {
-        Topic address = geoObjectTopic.getChildTopics().getTopicOrNull("dm4.contacts.address");
+    private Topic getAnschrift(Topic geoObject) {
+        return geoObject.getChildTopics().getTopicOrNull("dm4.contacts.address");
+    }
+
+    private String getId(Topic geoObject) {
+        String value = null;
+        if (geoObject.getUri().contains(KA1_GEO_OBJECT_URI_PREFIX)) {
+            value = geoObject.getUri().substring(KA1_GEO_OBJECT_URI_PREFIX.length());
+        } else {
+            value = "" + geoObject.getId();
+        }
+        return value;
+    }
+
+    private GeoCoordinate geoCoordinate(Topic address) {
         GeoCoordinate geoCoord = null;
         if (address != null) {
             geoCoord = geomapsService.getGeoCoordinate(address);
             if (geoCoord == null) {
                 // throw new RuntimeException("Geo coordinate is unknown");
-                logger.fine("No Geo Coordinate assigned to " + geoObjectTopic.getSimpleValue() + " address=" + address.getSimpleValue());
+                logger.fine("No Geo Coordinate assigned to " + address.getSimpleValue() + " address=" + address.getSimpleValue());
             }
-            logger.fine("No Address assigned to " + geoObjectTopic.getSimpleValue());
+            logger.fine("No Address assigned to " + address.getSimpleValue());
         }
         return geoCoord;
     }
@@ -490,15 +506,36 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     /**
      * @param   geoCoord    the geo coordinate already looked up.
      */
-    private GeoObject createGeoObjectTransferObject(Topic geoObjectTopic, GeoCoordinate geoCoord) {
+    private GeoObject createGeoObjectTransferObject(Topic geoObjectTopic, GeoCoordinate geoCoord, Topic address) {
+        // ...
         if (geoCoord == null) return null; // deal breaker
+        // ..
         GeoObject geoObject = new GeoObject();
-        Topic bezirk = bezirk(geoObjectTopic);
         geoObject.setName(geoObjectTopic.getSimpleValue().toString());
-        if (bezirk != null) geoObject.setBezirk(bezirk.getSimpleValue().toString()); // formerly deal breaker
+        Topic bezirk = bezirk(geoObjectTopic);
+        if (bezirk != null) {
+            geoObject.setBezirk(bezirk.getSimpleValue().toString());
+        }
+        if (address != null) {
+            geoObject.setAnschrift(address.getSimpleValue().toString());
+        }
         geoObject.setGeoCoordinate(geoCoord);
         geoObject.setLink(link(geoObjectTopic, bezirk));
+        geoObject.setId(getId(geoObjectTopic));
         return geoObject;
+    }
+
+    /**
+     * Returns the Kontakt topic assigned to the given Geo Object.
+     * If no Bezirk topic is assigned an exception is thrown.
+     */
+    private String anschrift(Topic geoObjectTopic) {
+        Topic anschrift = geoObjectTopic.getChildTopics().getTopic("dm4.contacts.address");
+        if (anschrift == null) {
+            logger.warning("Geo Object \"" + geoObjectTopic.getSimpleValue() + "\" has no Anschrift set");
+            return anschrift.getSimpleValue().toString(); // .replaceAll(" Deutschland", "");
+        }
+        return null;
     }
 
     /**
@@ -509,7 +546,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         Topic bezirk = facetsService.getFacet(geoObjectTopic, "ka2.bezirk.facet");
         if (bezirk == null) {
             // ### throw new RuntimeException("No Bezirk is assigned"); // May happen with fulltext search
-            logger.warning("Skipping Geo Object " + geoObjectTopic.getSimpleValue() + " MISSES BEZIRK");
+            logger.warning("Skipping Result \"" + geoObjectTopic.getSimpleValue() + "\" MISSES BEZIRK");
         }
         return bezirk;
     }
