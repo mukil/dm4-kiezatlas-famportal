@@ -219,14 +219,15 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         if (geoObject == null) {
             return Response.status(404).build();
         } else if (comment.message.isEmpty()) {
-            return Response.status(500).build();
+            return Response.status(400).build();
         } else if (geoObject.getTypeUri().equals(KiezatlasService.GEO_OBJECT)) {
             logger.info("Comment: Received message from \""+comment.contact+"\" on topic \"" + geoObject.getSimpleValue() + "\"");
             Topic topic = comments.createComment(geoObject.getId(), comment.message, comment.contact);
             if (topic != null) {
-                logger.info("SUCCESS! Comment created and moved into comments workspace");
+                return Response.noContent().build();
+            } else {
+                return Response.status(401).build();
             }
-            return Response.noContent().build();
         } else {
             logger.severe("Prevented a comment targeted to a non geo topic by user \"" + acService.getUsername() + "\"");
             return Response.status(401).build();
