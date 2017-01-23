@@ -92,7 +92,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     @Override
     public void init() {
-        // Create new districtUriMap and populate it
+        // Populating a map of District URIs : Topic IDs
         districtUriMap = new HashMap<String, Long>();
         List<Topic> topics = dm4.getTopicsByType("ka2.bezirk");
         for (Topic district : topics) {
@@ -103,6 +103,33 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
     // --- Retrieval API ---
+
+    @GET
+    @Path("/geoobject")
+    @Override
+    public List<GeoObject> getGeoObjects(@QueryParam("ids") List<String> topics) {
+        isAuthorized();
+        List<Topic> geoObjectTopics = null;
+        try {
+            if (topics.isEmpty()) {
+                throw new RuntimeException("Missing the \"category\" parameter in request");
+            }
+            Iterator<String> iteratorSets = topics.iterator();
+            while (iteratorSets.hasNext()) {
+                String nextId = iteratorSets.next();
+                Topic geoObject = websiteService.getGeoObjectById(nextId);
+                if (geoObject != null) {
+                    geoObjectTopics.add(geoObject);
+                } else {
+                    logger.warning("Could not find geo object for ID=" + nextId);
+                }
+            }
+        } catch(RuntimeException e) {
+            throw new RuntimeException("Fetching geo objects failed (topics=" + topics + ")", e);
+        }
+        logger.info("Orte API delivers " + geoObjectTopics.size() + " Kiezatlas Orte");
+        return createGeoObjectResultList(geoObjectTopics);
+    }
 
     @GET
     @Path("/geoobject")
@@ -130,13 +157,14 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             }
             // apply proximity filter to our resultset and turn them into geo-objects
             return applyProximityFilter(uniqueList, proximityFilter);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException("Fetching geo objects failed (categorySets=" + categorySets + ")", e);
         }
     }
 
     @GET
     @Path("/search")
+    @Override
     public List<GeoObject> searchGeoObjects(@QueryParam("query") String query,
                                             @QueryParam("category") List<CategorySet> categorySets,
                                             @QueryParam("district") String districtUri) {
@@ -145,7 +173,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         long districtId = 0;
         if (districtUri != null && districtUriMap.containsKey(districtUri)) districtId = districtUriMap.get(districtUri);
         // 1) Search in all Geo Objects with given fulltext query
-        List<Topic> geoObjects = websiteService.searchFulltextInGeoObjectChilds(query, true, false);
+        List<Topic> geoObjects = websiteService.searchFulltextInGeoObjectChilds(query, false, true, false);
         // 2) Filter Fulltext Search WITHOUT any category but possibley WITH a district parameter
         if (categorySets.isEmpty()) {
             logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITHOUT "
@@ -167,7 +195,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             // 3.3) turn categoryResults into a result list of geo objects
             results = createGeoObjectResultList(categoryResults);
         }
-        logger.info("Orte API Search Result delivers " + results.size() + " Kiezatlas Orte");
+        logger.info("Orte Search API delivers " + results.size() + " Kiezatlas Orte");
         return results;
     }
 

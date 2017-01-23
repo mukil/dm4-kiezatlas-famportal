@@ -12,11 +12,11 @@ public interface FamilienportalService {
 
     // --- Retrieval API ---
 
+    List<GeoObject> getGeoObjects(List<String> topics);
+
     List<GeoObject> getGeoObjects(List<CategorySet> categorySets, ProximityFilter proximity);
 
-    boolean isRelatedToFamportalCategory(Topic geoObject);
-
-    boolean isParentAggregatingTopic(Topic geoObject, long catId);
+    List<GeoObject> searchGeoObjects(String query, List<CategorySet> categorySets, String districtUri);
 
     // --- Redationalwerkzeug ---
 
@@ -32,5 +32,10 @@ public interface FamilienportalService {
 
     // ---
 
+    boolean isRelatedToFamportalCategory(Topic geoObject);
+
+    boolean isParentAggregatingTopic(Topic geoObject, long catId);
+
     GeoObjectCount countAssignments();
+
 }
