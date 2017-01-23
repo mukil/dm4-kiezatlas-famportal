@@ -10,7 +10,6 @@ import de.deepamehta.geomaps.model.GeoCoordinate;
 
 import de.deepamehta.core.RelatedTopic;
 import de.deepamehta.core.Topic;
-import de.deepamehta.core.model.TopicModel;
 import de.deepamehta.core.model.facets.FacetValueModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
@@ -27,15 +26,16 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.core.MediaType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.apache.commons.collections4.ListUtils;
 
@@ -180,9 +180,10 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @GET
     @Path("/geoobject/detail")
     @Override
-    public List<GeoObject> getGeoObjects(@QueryParam("ids") List<String> topics) {
+    public List<GeoObject> getGeoObjects(@QueryParam("ids") String topicIds) {
         isAuthorized();
-        List<Topic> geoObjectTopics = null;
+        List<Topic> geoObjectTopics = new ArrayList<Topic>();
+        List<String> topics = Arrays.asList(topicIds.split(","));
         try {
             if (topics.isEmpty()) {
                 throw new RuntimeException("Missing the \"category\" parameter in request");
@@ -192,32 +193,36 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
                 String nextId = iteratorSets.next();
                 Topic geoObject = websites.getGeoObjectById(nextId);
                 if (geoObject != null) {
+                    logger.info("Details API \"" + geoObject.getSimpleValue().toString() + "\" (id=\"" + nextId + "\")");
                     geoObjectTopics.add(geoObject);
                 } else {
-                    logger.warning("Could not find geo object for ID=" + nextId);
+                    logger.warning("Details API Could not fetch a geo object widh id=\"" + nextId + "\"");
                 }
             }
         } catch(RuntimeException e) {
             throw new RuntimeException("Fetching geo objects failed (topics=" + topics + ")", e);
         }
-        logger.info("Orte API delivers " + geoObjectTopics.size() + " Kiezatlas Orte");
+        logger.info("Details API delivers " + geoObjectTopics.size() + " Kiezatlas Orte");
         return createGeoObjectResultList(geoObjectTopics);
     }
 
     @POST
     @Path("/comment/{geoObjectId}")
     @Transactional
-    public Response createGeoObjectComment(@PathParam("geoObjectId") long geoObjectId, TopicModel comment) {
-        Topic geoObject = dm4.getTopic(geoObjectId);
-        if (geoObject.getTypeUri().equals(KiezatlasService.GEO_OBJECT)) {
-            logger.info("Creating comment \""+comment.toString()+"\" on topic " + geoObject.getSimpleValue());
-            String message = comment.getChildTopicsModel().getString("ka2.comment.message");
-            String contact = comment.getChildTopicsModel().getString("ka2.comment.contact");
-            comments.createComment(geoObjectId, message, contact);
-            logger.info("OK! Comment created and moved into comments workspace");
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createGeoObjectComment(@PathParam("geoObjectId") String geoObjectId, CommentModel comment) {
+        Topic geoObject = websites.getGeoObjectById(geoObjectId);
+        if (geoObject == null) {
+            return Response.status(404).build();
+        } else if (geoObject.getTypeUri().equals(KiezatlasService.GEO_OBJECT)) {
+            logger.info("Comment: Received message from \""+comment.contact+"\" on topic \"" + geoObject.getSimpleValue() + "\"");
+            Topic topic = comments.createComment(geoObject.getId(), comment.message, comment.contact);
+            if (topic != null) {
+                logger.info("SUCCESS! Comment created and moved into comments workspace");
+            }
             return Response.noContent().build();
         } else {
-            logger.warning("Preventing a comment on a topic (not of type GeoObject) unsupported via this API");
+            logger.severe("Preventing commenting on a topic not of type GeoObject!");
             return Response.status(401).build();
         }
     }

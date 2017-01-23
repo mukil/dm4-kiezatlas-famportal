@@ -12,7 +12,7 @@ public interface FamilienportalService {
 
     // --- Retrieval API ---
 
-    List<GeoObject> getGeoObjects(List<String> topics);
+    List<GeoObject> getGeoObjects(String topicIds);
 
     List<GeoObject> getGeoObjects(List<CategorySet> categorySets, ProximityFilter proximity);
 
