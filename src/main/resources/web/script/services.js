@@ -21,17 +21,18 @@ angular.module("famportal").service("famportalService", function($http) {
         $http.get("/facet/topic/" + topicId + "?" + queryString("facet_type_uri", facetTypeUris)).success(callback)
     }
 
+    /** Switch to name search endpoint of dm4-kiezatlas-website plugin. */
     this.searchGeoObjects = function() {
         var req = new ClockedRequest()
         return function(searchTerm, callback) {
-            req.perform("GET", "/site/geoobject", {search: searchTerm}, callback)
+            req.perform("GET", "/famportal/search/name", {search: searchTerm}, callback)
         }
     }()
 
     this.searchCategories = function() {
         var req = new ClockedRequest()
         return function(searchTerm, callback) {
-            req.perform("GET", "/site/category/objects", {search: searchTerm}, callback)
+            req.perform("GET", "/famportal/category/objects", {search: searchTerm}, callback)
         }
     }()
 
