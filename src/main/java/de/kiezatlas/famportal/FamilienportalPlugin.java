@@ -16,18 +16,23 @@ import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.Transactional;
 import de.kiezatlas.GeoObjects;
 import de.kiezatlas.GroupedGeoObjects;
+import de.kiezatlas.comments.CommentsService;
 import de.kiezatlas.website.WebsiteService;
+import de.kiezatlas.website.model.CommentModel;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.core.MediaType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -76,6 +81,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Inject private GeomapsService geomaps;
     @Inject private FacetsService facets;
     @Inject private WebsiteService website;
+    @Inject private CommentsService comments;
 
     Topic famportalWorkspace = null;
     HashMap<String, Long> districtUriMap = null;
@@ -94,7 +100,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
 
     @Override
     public void init() {
-        // Create new districtUriMap and populate it
+        // Populating a map of District URIs : Topic IDs
         districtUriMap = new HashMap<String, Long>();
         List<Topic> topics = dm4.getTopicsByType("ka2.bezirk");
         for (Topic district : topics) {
@@ -132,13 +138,14 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             }
             // apply proximity filter to our resultset and turn them into geo-objects
             return applyProximityFilter(uniqueList, proximityFilter);
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             throw new RuntimeException("Fetching geo objects failed (categorySets=" + categorySets + ")", e);
         }
     }
 
     @GET
     @Path("/search")
+    @Override
     public List<GeoObject> searchGeoObjects(@QueryParam("query") String query,
                                             @QueryParam("category") List<CategorySet> categorySets,
                                             @QueryParam("district") String districtUri) {
@@ -169,7 +176,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             // 3.3) turn categoryResults into a result list of geo objects
             results = createGeoObjectResultList(categoryResults);
         }
-        logger.info("Orte API Search Result delivers " + results.size() + " Kiezatlas Orte");
+        logger.info("Orte Search API delivers " + results.size() + " Kiezatlas Orte");
         return results;
     }
 
@@ -185,6 +192,62 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     public GeoObjects searchGeoObjects(@QueryParam("search") String query, @QueryParam("clock") long clock) {
         isAuthorized();
         return kiezatlas.searchGeoObjectNames(query, clock);
+    }
+
+    @Path("/geoobject/detail")
+    @Override
+    public List<GeoObject> getGeoObjects(@QueryParam("ids") String topicIds) {
+        isAuthorized();
+        List<Topic> geoObjectTopics = new ArrayList<Topic>();
+        List<String> topics = Arrays.asList(topicIds.split(","));
+        try {
+            if (topics.isEmpty()) {
+                throw new RuntimeException("Missing the \"category\" parameter in request");
+            }
+            if (topics.size() > 15) {
+                throw new RuntimeException("Too much information requested - Limit is set to 15 objects max.");
+            }
+            Iterator<String> iteratorSets = topics.iterator();
+            while (iteratorSets.hasNext()) {
+                String nextId = iteratorSets.next();
+                Topic geoObject = website.getGeoObjectById(nextId);
+                if (geoObject != null) {
+                    logger.info("Details API \"" + geoObject.getSimpleValue().toString() + "\" (id=\"" + nextId + "\")");
+                    geoObjectTopics.add(geoObject);
+                } else {
+                    logger.warning("Details API Could not fetch a geo object widh id=\"" + nextId + "\"");
+                }
+            }
+        } catch(RuntimeException e) {
+            throw new RuntimeException("Fetching geo objects failed (topics=" + topics + ")", e);
+        }
+        logger.info("Details API delivers " + geoObjectTopics.size() + " Kiezatlas Orte");
+        return createGeoObjectResultList(geoObjectTopics);
+    }
+
+    @POST
+    @Path("/comment/{geoObjectId}")
+    @Transactional
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response createGeoObjectComment(@PathParam("geoObjectId") String geoObjectId, CommentModel comment) {
+        // Note: isAuthorized by comments module
+        Topic geoObject = website.getGeoObjectById(geoObjectId);
+        if (geoObject == null) {
+            return Response.status(404).build();
+        } else if (comment.getMessage().isEmpty()) {
+            return Response.status(400).build();
+        } else if (geoObject.getTypeUri().equals(KiezatlasService.GEO_OBJECT)) {
+            logger.info("Comment: Received message from \""+comment.getContact() +"\" on topic \"" + geoObject.getSimpleValue() + "\"");
+            Topic topic = comments.createComment(geoObject.getId(), comment.getMessage(), comment.getContact());
+            if (topic != null) {
+                return Response.noContent().build();
+            } else {
+                return Response.status(401).build();
+            }
+        } else {
+            logger.severe("Prevented a comment targeted to a non geo topic by user \"" + acService.getUsername() + "\"");
+            return Response.status(401).build();
+        }
     }
 
     @GET
