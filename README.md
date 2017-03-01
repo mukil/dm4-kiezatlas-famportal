@@ -2,9 +2,27 @@
 DeepaMehta 4 Kiezatlas - Familienportal
 =======================================
 
+The module of the Kiezatlas Orte API
+
+Account registration and usage documentation available [here](http://api.kiezatlas.de/kiezatlas-orte-api).
+
+### Usage & Development
+
+See and compare to the section on [usage and development in this README](https://github.com/mukil/dm4-kiezatlas-website#usage--development).
+
+License
+-------
+
+Thise source code is licensed under the GNU GPL 3.0. It comes with no warranty.
 
 Version History
 ---------------
+
+**0.8.2** -- Upcoming
+
+* Added fulltext search endpoint for places (incl. filter by district)
+* Added endpoint to fetch certain place information by id
+* Added endpoint to handle comments on places (build on the [dm4-kiezatlas-comments](https://github.com/mukil/dm4-kiezatlas-comments) module)
 
 **0.8.1** -- Aug 02, 2016
 
