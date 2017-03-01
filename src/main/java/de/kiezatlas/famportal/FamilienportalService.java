@@ -12,13 +12,13 @@ public interface FamilienportalService {
 
     // --- Retrieval API ---
 
-    List<GeoObject> getGeoObjects(String topicIds);
+    List<GeoObjectDetail> getGeoObjects(String topicIds);
 
     List<GeoObject> getGeoObjects(List<CategorySet> categorySets, ProximityFilter proximity);
 
     List<GeoObject> searchGeoObjects(String query, List<CategorySet> categorySets, String districtUri);
 
-    // --- Redationalwerkzeug ---
+    // --- Redaktionswerkzeug ---
 
     void createAssignments(long famportalCategoryId, List<Long> geoObjectIds);
 

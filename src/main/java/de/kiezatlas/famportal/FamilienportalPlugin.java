@@ -14,6 +14,8 @@ import de.deepamehta.core.model.facets.FacetValueModel;
 import de.deepamehta.core.osgi.PluginActivator;
 import de.deepamehta.core.service.Inject;
 import de.deepamehta.core.service.Transactional;
+import de.kiezatlas.GeoObjects;
+import de.kiezatlas.GroupedGeoObjects;
 import de.kiezatlas.comments.CommentsService;
 import de.kiezatlas.website.WebsiteService;
 
@@ -77,7 +79,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Inject private AccessControlService acService;
     @Inject private GeomapsService geomaps;
     @Inject private FacetsService facets;
-    @Inject private WebsiteService websites;
+    @Inject private WebsiteService website;
     @Inject private CommentsService comments;
 
     Topic famportalWorkspace = null;
@@ -151,7 +153,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         long districtId = 0;
         if (districtUri != null && districtUriMap.containsKey(districtUri)) districtId = districtUriMap.get(districtUri);
         // 1) Search in all Geo Objects with given fulltext query
-        List<Topic> geoObjects = websites.searchFulltextInGeoObjectChilds(query, false, true, false);
+        List<Topic> geoObjects = website.searchFulltextInGeoObjectChilds(query, false, true, false);
         // 2) Filter Fulltext Search WITHOUT any category but possibley WITH a district parameter
         if (categorySets.isEmpty()) {
             logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITHOUT "
@@ -178,9 +180,23 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     }
 
     @GET
+    @Path("/category/objects")
+    public GroupedGeoObjects searchCategories(@QueryParam("search") String query, @QueryParam("clock") long clock) {
+        isAuthorized();
+        return kiezatlas.searchCategories(query, clock);
+    }
+
+    @GET
+    @Path("/search/name")
+    public GeoObjects searchGeoObjects(@QueryParam("search") String query, @QueryParam("clock") long clock) {
+        isAuthorized();
+        return kiezatlas.searchGeoObjectNames(query, clock);
+    }
+
+    @GET
     @Path("/geoobject/detail")
     @Override
-    public List<GeoObject> getGeoObjects(@QueryParam("ids") String topicIds) {
+    public List<GeoObjectDetail> getGeoObjects(@QueryParam("ids") String topicIds) {
         isAuthorized();
         List<Topic> geoObjectTopics = new ArrayList<Topic>();
         List<String> topics = Arrays.asList(topicIds.split(","));
@@ -194,7 +210,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             Iterator<String> iteratorSets = topics.iterator();
             while (iteratorSets.hasNext()) {
                 String nextId = iteratorSets.next();
-                Topic geoObject = websites.getGeoObjectById(nextId);
+                Topic geoObject = website.getGeoObjectById(nextId);
                 if (geoObject != null) {
                     logger.info("Details API \"" + geoObject.getSimpleValue().toString() + "\" (id=\"" + nextId + "\")");
                     geoObjectTopics.add(geoObject);
@@ -206,7 +222,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             throw new RuntimeException("Fetching geo objects failed (topics=" + topics + ")", e);
         }
         logger.info("Details API delivers " + geoObjectTopics.size() + " Kiezatlas Orte");
-        return createGeoObjectResultList(geoObjectTopics);
+        return createGeoObjectDetailResultList(geoObjectTopics);
     }
 
     @POST
@@ -215,7 +231,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createGeoObjectComment(@PathParam("geoObjectId") String geoObjectId, CommentModel comment) {
         // Note: isAuthorized by comments module
-        Topic geoObject = websites.getGeoObjectById(geoObjectId);
+        Topic geoObject = website.getGeoObjectById(geoObjectId);
         if (geoObject == null) {
             return Response.status(404).build();
         } else if (comment.message.isEmpty()) {
@@ -421,9 +437,9 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     private void addGeoObjectWithDistrictParameter(List<GeoObject> results, Topic geoObject, long districtId,
                                                    Topic address, GeoCoordinate coordinates) {
         if (districtId == 0) {
-            results.add(createGeoObjectTransferObject(geoObject, coordinates, address));
+            results.add(createTransferGeoObject(geoObject, coordinates, address));
         } else if (districtId > 0 && isParentAggregatingTopic(geoObject, districtId)) {
-            results.add(createGeoObjectTransferObject(geoObject, coordinates, address));
+            results.add(createTransferGeoObject(geoObject, coordinates, address));
         }
     }
 
@@ -452,7 +468,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
                         continue;
                     }
                 }
-                GeoObject result = createGeoObjectTransferObject(geoObjectTopic, geoCoord, address);
+                GeoObject result = createTransferGeoObject(geoObjectTopic, geoCoord, address);
                 if (result != null) results.add(result);
             } catch (Exception e) {
                 logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
@@ -471,7 +487,26 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             try {
                 Topic address = getAnschrift(geoObjectTopic);
                 GeoCoordinate geoCoord = geoCoordinate(address);
-                GeoObject result = createGeoObjectTransferObject(geoObjectTopic, geoCoord, address);
+                GeoObject result = createTransferGeoObject(geoObjectTopic, geoCoord, address);
+                if (result != null) results.add(result);
+            } catch (Exception e) {
+                logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
+                    geoObjectTopic.getSimpleValue() + "\") from result (" + e + ")");
+            }
+        }
+        return results;
+    }
+
+    /**
+     * Filters the given list about all elements with invalid geo-coordinates.
+     */
+    private List<GeoObjectDetail> createGeoObjectDetailResultList(List<Topic> geoObjects) {
+        List<GeoObjectDetail> results = new ArrayList<GeoObjectDetail>();
+        for (Topic geoObjectTopic : geoObjects) {
+            try {
+                Topic address = getAnschrift(geoObjectTopic);
+                GeoCoordinate geoCoord = geoCoordinate(address);
+                GeoObjectDetail result = createTransferGeoObjectDetail(geoObjectTopic, geoCoord, address);
                 if (result != null) results.add(result);
             } catch (Exception e) {
                 logger.warning("### Excluding geo object " + geoObjectTopic.getId() + " (\"" +
@@ -541,7 +576,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     /**
      * @param   geoCoord    the geo coordinate already looked up.
      */
-    private GeoObject createGeoObjectTransferObject(Topic geoObjectTopic, GeoCoordinate geoCoord, Topic address) {
+    private GeoObject createTransferGeoObject(Topic geoObjectTopic, GeoCoordinate geoCoord, Topic address) {
         // ...
         if (geoCoord == null) return null; // deal breaker
         // ..
@@ -553,6 +588,33 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         }
         if (address != null) {
             geoObject.setAnschrift(address.getSimpleValue().toString());
+        }
+        geoObject.setGeoCoordinate(geoCoord);
+        geoObject.setLink(link(geoObjectTopic, bezirk));
+        geoObject.setId(getId(geoObjectTopic));
+        return geoObject;
+    }
+
+    /**
+     * @param   geoCoord    the geo coordinate already looked up.
+     */
+    private GeoObjectDetail createTransferGeoObjectDetail(Topic geoObjectTopic, GeoCoordinate geoCoord, Topic address) {
+        // ...
+        if (geoCoord == null) return null; // deal breaker
+        // ..
+        GeoObjectDetail geoObject = new GeoObjectDetail();
+        geoObject.setName(geoObjectTopic.getSimpleValue().toString());
+        Topic bezirk = bezirk(geoObjectTopic);
+        if (bezirk != null) {
+            geoObject.setBezirk(bezirk.getSimpleValue().toString());
+        }
+        if (address != null) {
+            String street = address.getChildTopics().getStringOrNull("dm4.contacts.street");
+            if (street != null) geoObject.setStrasseHnr(street);
+            String plz = address.getChildTopics().getStringOrNull("dm4.contacts.postal_code");
+            if (plz != null) geoObject.setPostleitzahl(plz);
+            String stadt = address.getChildTopics().getStringOrNull("dm4.contacts.city");
+            if (stadt != null) geoObject.setStadt(stadt);
         }
         geoObject.setGeoCoordinate(geoCoord);
         geoObject.setLink(link(geoObjectTopic, bezirk));
@@ -698,4 +760,5 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
             }
         }
     }
+
 }
