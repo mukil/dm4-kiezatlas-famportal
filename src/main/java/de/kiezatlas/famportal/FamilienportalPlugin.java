@@ -194,9 +194,10 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         return kiezatlas.searchGeoObjectNames(query, clock);
     }
 
+    @GET
     @Path("/geoobject/detail")
     @Override
-    public List<GeoObjectDetail> getGeoObjectDetails(@QueryParam("ids") String topicIds) {
+    public List<GeoObjectDetail> getGeoObjects(@QueryParam("ids") String topicIds) {
         isAuthorized();
         List<Topic> geoObjectTopics = new ArrayList<Topic>();
         List<String> topics = Arrays.asList(topicIds.split(","));

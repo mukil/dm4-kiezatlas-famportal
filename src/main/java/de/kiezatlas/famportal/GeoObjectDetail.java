@@ -35,7 +35,7 @@ public class GeoObjectDetail implements JSONEnabled {
 
     void setStrasseHnr(String strasseHnr) {
         try {
-            json.put("strasse", strasseHnr);
+            json.put("strasse_hnr", strasseHnr);
         } catch (Exception e) {
             throw new RuntimeException("Constructing a GeoObject failed", e);
         }
@@ -43,7 +43,7 @@ public class GeoObjectDetail implements JSONEnabled {
 
     void setPostleitzahl(String zipCode) {
         try {
-            json.put("plz", zipCode);
+            json.put("postleitzahl", zipCode);
         } catch (Exception e) {
             throw new RuntimeException("Constructing a GeoObject failed", e);
         }
