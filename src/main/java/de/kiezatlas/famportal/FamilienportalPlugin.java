@@ -153,8 +153,8 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
         List<GeoObject> results = new ArrayList<GeoObject>();
         long districtId = 0;
         if (districtUri != null && districtUriMap.containsKey(districtUri)) districtId = districtUriMap.get(districtUri);
-        // 1) Search in all Geo Objects with given fulltext query
-        List<Topic> geoObjects = website.searchFulltextInGeoObjectChilds(query, false, true, false);
+        // 1) Search in all Geo Objects with given fulltext query / with a simple appendingWildcard search
+        List<Topic> geoObjects = website.searchFulltextInGeoObjectChilds(query, false, true, false, false);
         // 2) Filter Fulltext Search WITHOUT any category but possibley WITH a district parameter
         if (categorySets.isEmpty()) {
             logger.info("Building response for fulltext query on " + geoObjects.size() + " geo objects WITHOUT "
