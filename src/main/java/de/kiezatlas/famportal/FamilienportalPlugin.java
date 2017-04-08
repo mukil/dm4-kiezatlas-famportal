@@ -18,7 +18,7 @@ import de.kiezatlas.GeoObjects;
 import de.kiezatlas.GroupedGeoObjects;
 import de.kiezatlas.comments.CommentsService;
 import de.kiezatlas.website.WebsiteService;
-import de.kiezatlas.website.model.CommentModel;
+import de.kiezatlas.website.model.CommentView;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
@@ -230,7 +230,7 @@ public class FamilienportalPlugin extends PluginActivator implements Familienpor
     @Path("/comment/{geoObjectId}")
     @Transactional
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createGeoObjectComment(@PathParam("geoObjectId") String geoObjectId, CommentModel comment) {
+    public Response createGeoObjectComment(@PathParam("geoObjectId") String geoObjectId, CommentView comment) {
         // Note: isAuthorized by comments module
         Topic geoObject = website.getGeoObjectById(geoObjectId);
         if (geoObject == null) {
