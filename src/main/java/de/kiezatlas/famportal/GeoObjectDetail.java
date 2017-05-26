@@ -2,6 +2,7 @@ package de.kiezatlas.famportal;
 
 import de.deepamehta.core.JSONEnabled;
 import de.deepamehta.geomaps.model.GeoCoordinate;
+import org.codehaus.jettison.json.JSONArray;
 
 import org.codehaus.jettison.json.JSONObject;
 
@@ -72,6 +73,48 @@ public class GeoObjectDetail implements JSONEnabled {
             geolocation.put("lat", geoCoord.lat);
             //
             json.put("geolocation", geolocation);
+        } catch (Exception e) {
+            throw new RuntimeException("Constructing a GeoObject failed", e);
+        }
+    }
+
+    void setBeschreibung(String description) {
+        try {
+            json.put("beschreibung", description);
+        } catch (Exception e) {
+            throw new RuntimeException("Constructing a GeoObject failed", e);
+        }
+    }
+
+    void initDetails() {
+        try {
+            json.put("stichworte", new JSONArray());
+            json.put("kategorien", new JSONArray());
+            json.put("beschreibung", "");
+        } catch (Exception e) {
+            throw new RuntimeException("Constructing a GeoObject failed", e);
+        }
+    }
+
+    void addCategory(String category) {
+        try {
+            json.getJSONArray("kategorien").put(category);
+        } catch (Exception e) {
+            throw new RuntimeException("Constructing a GeoObject failed, call initDetails before adding categories", e);
+        }
+    }
+
+    void addStichworte(String tag) {
+        try {
+            json.getJSONArray("stichworte").put(tag);
+        } catch (Exception e) {
+            throw new RuntimeException("Constructing a GeoObject failed, call initDetails before adding tags", e);
+        }
+    }
+
+    void setLastModified(long timevalue) {
+        try {
+            json.put("modified", timevalue);
         } catch (Exception e) {
             throw new RuntimeException("Constructing a GeoObject failed", e);
         }
