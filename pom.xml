@@ -6,7 +6,7 @@
 
     <name>DeepaMehta 4 Kiezatlas - Familienportal</name>
     <groupId>de.kiezatlas</groupId>
-    <artifactId>dm48-kiezatlas-famportal</artifactId>
+    <artifactId>dm49-kiezatlas-famportal</artifactId>
     <version>0.8.2-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
@@ -16,46 +16,46 @@
         <version>4.8.3</version>
     </parent>
 
-    <!--properties-->
+    <properties>
         <!--dm4.deploy.dir>/home/malted/source/mikro/deepamehta/bundle-deploy</dm4.deploy.dir-->
 	<!--dm4.deploy.dir>/home/malted/Downloads/deepamehta-4.8.2/bundle-deploy</dm4.deploy.dir-->
-    <!--/properties-->
+    </properties>
 
     <dependencies>
         <dependency>
             <groupId>de.kiezatlas</groupId>
-            <artifactId>dm48-kiezatlas</artifactId>
-            <version>2.1.9-SNAPSHOT</version>
+            <artifactId>dm49-kiezatlas</artifactId>
+            <version>2.2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.kiezatlas</groupId>
-            <artifactId>dm48-kiezatlas-website</artifactId>
-            <version>0.6-SNAPSHOT</version>
+            <artifactId>dm49-kiezatlas-website</artifactId>
+            <version>0.7.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.kiezatlas</groupId>
-            <artifactId>dm48-kiezatlas-comments</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>dm49-kiezatlas-comments</artifactId>
+            <version>0.2.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.kiezatlas</groupId>
-            <artifactId>dm48-kiezatlas-etl</artifactId>
+            <artifactId>dm49-kiezatlas-etl</artifactId>
             <version>0.6.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-workspaces</artifactId>
-            <version>4.8.3</version>
+            <version>4.9.1</version>
         </dependency>
         <dependency>
             <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-time</artifactId>
-            <version>4.8.3</version>
+            <version>4.9.1</version>
         </dependency>
         <dependency>
             <groupId>de.deepamehta</groupId>
             <artifactId>deepamehta-facets</artifactId>
-            <version>4.8.3</version>
+            <version>4.9.1</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
